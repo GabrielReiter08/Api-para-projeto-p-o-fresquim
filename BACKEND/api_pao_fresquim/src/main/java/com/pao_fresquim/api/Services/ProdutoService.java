@@ -65,4 +65,16 @@ public class ProdutoService {
 
          return  repository.save(p);
     }
+
+    // metódo para editar produto
+
+    public Produto editarProduto(Long id, Produto produto){
+        Produto produtoExiste = repository.findById(id).orElseThrow(()-> new RuntimeException("Produto não encontrado"));
+
+        produtoExiste.setNome(produto.getNome());
+        produtoExiste.setPreco(produto.getPreco());
+        produtoExiste.setCodigo_barras(produto.getCodigo_barras());
+
+        return repository.save(produtoExiste);
+    }
 }

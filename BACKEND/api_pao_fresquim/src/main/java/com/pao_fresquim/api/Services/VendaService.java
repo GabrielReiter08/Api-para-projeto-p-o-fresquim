@@ -18,6 +18,7 @@ public class VendaService {
         this.repository = repository;
     }
 
+    // para retornar um relatório
     public List<Venda> ListarVendas(){
         return repository.findAll();
     }

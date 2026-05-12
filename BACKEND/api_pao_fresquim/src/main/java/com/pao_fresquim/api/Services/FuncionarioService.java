@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +65,22 @@ public class FuncionarioService {
         }
 
         return false;
+    }
+
+    // metodo p editar funcionário
+
+    public Funcionario editarFuncionario(Long id, Funcionario funcionario){
+        Funcionario funcionarioExiste = repository.findById(id).orElseThrow(()-> new RuntimeException("Funcionário não encontrado"));
+
+        funcionarioExiste.setNome(funcionario.getNome());
+        funcionarioExiste.setTelefone(funcionario.getTelefone());
+        funcionarioExiste.setEndereco(funcionario.getEndereco());
+        funcionarioExiste.setContato_emergencia(funcionario.getContato_emergencia());
+        funcionarioExiste.setLicensas(funcionario.getLicensas());
+
+        // Por lógica não coloquei como editar data de admissão
+
+        return repository.save(funcionarioExiste);
     }
 
 }

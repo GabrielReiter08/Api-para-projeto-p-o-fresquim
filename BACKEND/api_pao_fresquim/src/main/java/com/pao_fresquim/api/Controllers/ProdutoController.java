@@ -44,7 +44,11 @@ public class ProdutoController {
     }
 
 
-    // criar metodo de atualizar produto venda
+    // Criado metódo para edição de produto
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Produto> editarProduto(@PathVariable Long id, @RequestBody Produto produto){
+        return ResponseEntity.ok(service.editarProduto(id, produto));
+    }
 
 }

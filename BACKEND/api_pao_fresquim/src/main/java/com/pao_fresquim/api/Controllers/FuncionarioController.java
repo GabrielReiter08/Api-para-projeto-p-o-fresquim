@@ -43,5 +43,10 @@ public class FuncionarioController {
         return removido ? "Funcionário removido com sucesso ✅" : "Funcionário não encontrado! ⚠️";
     }
 
+    // editar funcionario
+    @PutMapping("/{id}")
+    public ResponseEntity<Funcionario> editarFuncionario(@PathVariable Long id, @RequestBody Funcionario funcionario){
+        return ResponseEntity.ok(service.editarFuncionario(id, funcionario));
+    }
 
 }

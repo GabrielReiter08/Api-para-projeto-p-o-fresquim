@@ -1,6 +1,7 @@
 package com.pao_fresquim.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pao_fresquim.api.Enums.CargoFuncionario;
 import jakarta.persistence.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ public class Funcionario {
     private String nome;
     private String telefone;
     private String endereco;
+    private CargoFuncionario cargo;
     private String contato_emergencia;
     private LocalDate data_admissao;
     private String licensas;
@@ -53,10 +55,11 @@ public class Funcionario {
 
     public Funcionario(){}
 
-    public Funcionario(String nome, String telefone, String endereco, String contato_emergencia, LocalDate data_admissao, String licensas, byte[] atestadoMedico) {
+    public Funcionario(String nome, String telefone, CargoFuncionario cargo, String endereco, String contato_emergencia, LocalDate data_admissao, String licensas, byte[] atestadoMedico) {
         this.nome = nome;
         this.telefone = telefone;
         this.endereco = endereco;
+        this.cargo = cargo;
         this.contato_emergencia = contato_emergencia;
         this.data_admissao = data_admissao;
         this.licensas = licensas;
