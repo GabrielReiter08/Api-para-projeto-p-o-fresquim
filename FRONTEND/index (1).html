@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pao FresQUIM</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown-dark: #6B2D0E;
+    --brown-mid: #8B3A14;
+    --brown-light: #A0522D;
+    --brown-pale: #C4956A;
+    --cream: #FAF5EE;
+    --cream-dark: #F0E8DC;
+    --cream-border: #E2D4C0;
+    --text-dark: #3B1F0A;
+    --text-mid: #6B4423;
+    --text-light: #9A7055;
+    --green: #2E7D32;
+    --green-bg: #E8F5E9;
+    --orange: #E65100;
+    --orange-bg: #FFF3E0;
+    --red: #C62828;
+    --white: #FFFFFF;
+    --shadow: 0 4px 24px rgba(107,45,14,0.10);
+    --shadow-sm: 0 2px 8px rgba(107,45,14,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #EDE0CE;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .app-shell {
+    width: 390px;
+    min-height: 780px;
+    background: var(--cream);
+    border-radius: 36px;
+    overflow: hidden;
+    box-shadow: 0 20px 80px rgba(80,30,10,0.25);
+    position: relative;
+  }
+  .screen {
+    display: none;
+    flex-direction: column;
+    min-height: 780px;
+    background: var(--cream);
+    animation: fadeIn 0.22s ease;
+  }
+  .screen.active { display: flex; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  /* TOP BAR */
+  .topbar {
+    display: flex;
+    align-items: center;
+    padding: 20px 22px 14px;
+    background: var(--cream);
+    border-bottom: 1.5px solid var(--cream-border);
+    gap: 10px;
+  }
+  .topbar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--brown-dark);
+    flex: 1;
+    text-align: center;
+  }
+  .back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--brown-dark);
+    font-size: 22px;
+    font-weight: 800;
+    padding: 2px 8px 2px 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Nunito', sans-serif;
+  }
+  .back-btn:hover { color: var(--brown-light); }
+  .back-arrow {
+    width: 22px; height: 22px;
+    display: inline-block;
+  }
+
+  /* HOME SCREEN */
+  .home-header {
+    background: var(--cream);
+    padding: 38px 22px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1.5px solid var(--cream-border);
+  }
+  .home-logo-circle {
+    width: 84px; height: 84px;
+    background: var(--cream-dark);
+    border-radius: 50%;
+    border: 2.5px solid var(--cream-border);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .home-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--brown-dark);
+    letter-spacing: -0.5px;
+  }
+  .home-brand span { color: var(--brown-pale); }
+  .home-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 28px 22px;
+    flex: 1;
+  }
+  .home-card {
+    background: var(--white);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 18px;
+    padding: 26px 10px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.18s;
+    box-shadow: var(--shadow-sm);
+  }
+  .home-card:hover, .home-card:active {
+    background: var(--cream-dark);
+    border-color: var(--brown-pale);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .home-card-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-align: center;
+  }
+
+  /* CONTENT AREA */
+  .screen-content {
+    flex: 1;
+    padding: 18px 20px 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* BUTTONS */
+  .btn-primary {
+    background: var(--brown-dark);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.16s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--brown-mid); transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-outline {
+    background: transparent;
+    color: var(--brown-dark);
+    border: 2px solid var(--brown-dark);
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.16s;
+  }
+  .btn-outline:hover { background: var(--cream-dark); }
+  .btn-sm {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-radius: 10px;
+    width: auto;
+  }
+  .btn-pay {
+    background: var(--cream-dark);
+    color: var(--brown-dark);
+    border: 2px solid var(--cream-border);
+    border-radius: 10px;
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    flex: 1;
+    transition: all 0.16s;
+  }
+  .btn-pay:hover, .btn-pay.selected {
+    background: var(--brown-dark);
+    color: var(--white);
+    border-color: var(--brown-dark);
+  }
+
+  /* SEARCH BAR */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    gap: 8px;
+  }
+  .search-bar input {
+    border: none;
+    background: transparent;
+    flex: 1;
+    font-size: 14px;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text-dark);
+    outline: none;
+  }
+  .search-bar input::placeholder { color: var(--text-light); }
+
+  /* INPUT FIELD */
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .field-group label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-mid);
+    padding-left: 2px;
+  }
+  .field-input {
+    background: var(--white);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text-dark);
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+  .field-input:focus { border-color: var(--brown-pale); }
+  select.field-input { appearance: none; cursor: pointer; }
+
+  /* LIST ITEM */
+  .list-item {
+    background: var(--white);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .list-item:hover { background: var(--cream-dark); border-color: var(--brown-pale); }
+  .list-item-left { display: flex; flex-direction: column; gap: 2px; }
+  .list-item-name { font-size: 15px; font-weight: 700; color: var(--text-dark); }
+  .list-item-sub { font-size: 12px; color: var(--text-light); font-weight: 600; }
+  .chevron {
+    color: var(--brown-pale);
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  /* BADGE */
+  .badge {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .badge-orange { background: var(--orange-bg); color: var(--orange); }
+  .badge-red { background: #FFEBEE; color: var(--red); }
+
+  /* VENDA ITEMS */
+  .venda-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 14px;
+    background: var(--white);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 10px;
+  }
+  .venda-item-name { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+  .venda-item-price { font-size: 14px; font-weight: 800; color: var(--brown-dark); }
+  .venda-total {
+    background: var(--brown-dark);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 4px 0;
+  }
+  .venda-total-label { font-size: 15px; font-weight: 700; }
+  .venda-total-value { font-size: 18px; font-weight: 800; }
+  .pay-row { display: flex; gap: 10px; }
+
+  /* FIADO TABLE */
+  .fiado-table { width: 100%; border-collapse: collapse; }
+  .fiado-table th {
+    font-size: 12px; font-weight: 800; color: var(--text-mid);
+    text-align: left; padding: 8px 6px;
+    border-bottom: 2px solid var(--cream-border);
+  }
+  .fiado-table td {
+    font-size: 13px; font-weight: 600; color: var(--text-dark);
+    padding: 10px 6px;
+    border-bottom: 1px solid var(--cream-border);
+    vertical-align: top;
+  }
+  .fiado-table tr:hover td { background: var(--cream-dark); cursor: pointer; }
+  .fiado-total-row {
+    background: var(--cream-dark);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  .fiado-total-label { font-size: 14px; font-weight: 700; color: var(--text-mid); }
+  .fiado-total-value { font-size: 16px; font-weight: 800; color: var(--brown-dark); }
+
+  /* SCANNER */
+  .scanner-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 40px 20px;
+  }
+  .scanner-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-mid);
+    text-align: center;
+    line-height: 1.5;
+  }
+  .scanner-pulse {
+    animation: pulse 1.4s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.55;} }
+
+  /* SERASA STATUS */
+  .serasa-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    background: var(--green-bg);
+    border: 1.5px solid #A5D6A7;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .serasa-status.reprovado {
+    background: #FFEBEE;
+    border-color: #FFCDD2;
+    color: var(--red);
+  }
+
+  /* FUNCIONARIO DETAIL */
+  .detail-row {
+    background: var(--white);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .detail-label { font-size: 12px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+  .detail-value { font-size: 15px; font-weight: 700; color: var(--text-dark); }
+  .ponto-row { display: flex; gap: 10px; }
+  .ponto-card {
+    flex: 1;
+    background: var(--cream-dark);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .ponto-time { font-size: 18px; font-weight: 800; color: var(--brown-dark); }
+  .ponto-tipo { font-size: 11px; font-weight: 700; color: var(--text-light); }
+  .link-btn {
+    background: none;
+    border: none;
+    color: var(--brown-dark);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: 'Nunito', sans-serif;
+    padding: 0;
+  }
+
+  /* GRAFICO */
+  .tabs-row {
+    display: flex;
+    background: var(--cream-dark);
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+  }
+  .tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 9px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text-light);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn.active {
+    background: var(--brown-dark);
+    color: var(--white);
+    box-shadow: 0 2px 8px rgba(107,45,14,0.18);
+  }
+  .chart-container {
+    background: var(--white);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 14px;
+    padding: 16px 12px 10px;
+    position: relative;
+  }
+  .chart-date {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+  .chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 140px;
+    position: relative;
+    padding-bottom: 24px;
+  }
+  .chart-y {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 116px;
+    padding-right: 6px;
+  }
+  .chart-y-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-light);
+    text-align: right;
+  }
+  .bars-area {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    height: 116px;
+  }
+  .bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    justify-content: flex-end;
+    position: relative;
+  }
+  .bar {
+    width: 100%;
+    background: var(--brown-pale);
+    border-radius: 5px 5px 0 0;
+    transition: all 0.3s;
+    position: relative;
+    cursor: pointer;
+  }
+  .bar.highlight { background: var(--brown-dark); }
+  .bar-tooltip {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--brown-dark);
+    color: var(--white);
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    pointer-events: none;
+    display: none;
+  }
+  .bar:hover .bar-tooltip { display: block; }
+  .bar-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-light);
+    position: absolute;
+    bottom: -18px;
+  }
+  .chart-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 0;
+  }
+  .chart-total-label { font-size: 13px; font-weight: 700; color: var(--text-mid); }
+  .chart-total-value { font-size: 16px; font-weight: 800; color: var(--brown-dark); }
+
+  /* CAMERAS */
+  .camera-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    flex: 1;
+    padding: 28px 20px;
+  }
+  .camera-card {
+    background: var(--white);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 16px;
+    padding: 30px 14px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: var(--shadow-sm);
+  }
+  .camera-card:hover { background: var(--cream-dark); border-color: var(--brown-pale); }
+  .camera-card-label { font-size: 15px; font-weight: 700; color: var(--text-dark); }
+  .camera-feed {
+    width: 100%;
+    aspect-ratio: 16/10;
+    background: #1a1a1a;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .camera-live-dot {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 8px; height: 8px;
+    background: #ff3b3b;
+    border-radius: 50%;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+  .camera-offline { color: #555; font-size: 11px; font-weight: 700; }
+
+  /* NOTIFICATION */
+  .notif {
+    position: fixed;
+    top: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--green);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    z-index: 9999;
+    animation: notifIn 0.3s ease, notifOut 0.3s ease 2s forwards;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  @keyframes notifIn { from{opacity:0;transform:translateX(-50%) translateY(-12px);} to{opacity:1;transform:translateX(-50%) translateY(0);} }
+  @keyframes notifOut { to{opacity:0;transform:translateX(-50%) translateY(-12px);} }
+
+  /* MODAL */
+  .modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(59,31,10,0.5);
+    backdrop-filter: blur(2px);
+    z-index: 100;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-card {
+    background: var(--cream);
+    border-radius: 24px 24px 0 0;
+    padding: 28px 24px 36px;
+    width: 100%;
+    animation: slideUp 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  @keyframes slideUp { from{transform:translateY(40px); opacity:0;} to{transform:translateY(0); opacity:1;} }
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--brown-dark);
+    text-align: center;
+  }
+  .modal-icon {
+    width: 64px; height: 64px;
+    background: var(--green-bg);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--cream-border); margin: 4px 0; }
+
+  /* SCROLL */
+  .screen-content::-webkit-scrollbar { width: 4px; }
+  .screen-content::-webkit-scrollbar-track { background: transparent; }
+  .screen-content::-webkit-scrollbar-thumb { background: var(--cream-border); border-radius: 4px; }
+
+  /* RELATORIO CARD */
+  .relatorio-card {
+    background: var(--brown-dark);
+    color: var(--white);
+    border-radius: 14px;
+    padding: 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .relatorio-label { font-size: 12px; font-weight: 700; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; }
+  .relatorio-value { font-size: 28px; font-weight: 800; font-family: 'Playfair Display', serif; }
+
+  /* PRODUTO ADD */
+  .remove-btn {
+    background: #FFEBEE;
+    color: var(--red);
+    border: none;
+    border-radius: 8px;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 800;
+    transition: background 0.15s;
+  }
+  .remove-btn:hover { background: #FFCDD2; }
+  .qty-btn {
+    background: var(--cream-dark);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 8px;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--brown-dark);
+    transition: background 0.15s;
+  }
+  .qty-btn:hover { background: var(--cream-border); }
+  .qty-display { font-size: 14px; font-weight: 800; color: var(--text-dark); min-width: 24px; text-align: center; }
+
+  /* CLIENTE FIADO DETALHE */
+  .fiado-detail-item {
+    background: var(--white);
+    border: 1.5px solid var(--cream-border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .fiado-detail-produto { font-size: 15px; font-weight: 700; color: var(--text-dark); }
+  .fiado-detail-sub { font-size: 12px; color: var(--text-light); font-weight: 600; }
+  .fiado-detail-price { font-size: 16px; font-weight: 800; color: var(--brown-dark); }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-light);
+    padding: 2px 0;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app">
+
+  <!-- ===================== SCREEN: HOME ===================== -->
+  <div class="screen active" id="screen-home">
+    <div class="home-header">
+      <div class="home-logo-circle">
+        <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+          <ellipse cx="26" cy="32" rx="18" ry="11" fill="#C4956A"/>
+          <ellipse cx="26" cy="29" rx="16" ry="9" fill="#A0522D"/>
+          <ellipse cx="26" cy="27" rx="13" ry="7" fill="#C4956A"/>
+          <ellipse cx="26" cy="25" rx="10" ry="5" fill="#8B3A14"/>
+          <path d="M18 22 Q26 12 34 22" stroke="#6B2D0E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <circle cx="26" cy="15" r="3.5" fill="#6B2D0E"/>
+          <circle cx="20" cy="18" r="2.5" fill="#8B3A14"/>
+          <circle cx="32" cy="18" r="2.5" fill="#8B3A14"/>
+        </svg>
+      </div>
+      <div class="home-brand">Pao <span>FresQUIM</span></div>
+    </div>
+    <div class="home-grid">
+      <div class="home-card" onclick="goTo('venda')">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <rect x="8" y="14" width="28" height="20" rx="4" fill="#C4956A"/>
+          <rect x="11" y="17" width="22" height="14" rx="2" fill="#FAF5EE"/>
+          <rect x="14" y="20" width="16" height="2.5" rx="1.2" fill="#8B3A14"/>
+          <rect x="14" y="24.5" width="10" height="2.5" rx="1.2" fill="#8B3A14"/>
+          <rect x="14" y="29" width="13" height="2" rx="1" fill="#C4956A"/>
+          <circle cx="34" cy="12" r="5" fill="#6B2D0E"/>
+          <path d="M32 12 L33.5 13.5 L36 10.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="home-card-label">Registrar Venda</span>
+      </div>
+      <div class="home-card" onclick="goTo('clientes')">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <circle cx="17" cy="17" r="6" fill="#C4956A"/>
+          <circle cx="29" cy="17" r="6" fill="#A0522D"/>
+          <path d="M5 36 Q5 28 17 28 Q22 28 23 30" stroke="#8B3A14" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M23 30 Q24 28 29 28 Q39 28 39 36" stroke="#6B2D0E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="home-card-label">Clientes</span>
+      </div>
+      <div class="home-card" onclick="goTo('funcionarios')">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <circle cx="22" cy="16" r="7" fill="#A0522D"/>
+          <path d="M8 38 Q8 28 22 28 Q36 28 36 38" fill="#C4956A"/>
+          <rect x="19" y="28" width="6" height="10" rx="2" fill="#8B3A14"/>
+          <rect x="16" y="31" width="12" height="3" rx="1.5" fill="#6B2D0E"/>
+        </svg>
+        <span class="home-card-label">Funcionarios</span>
+      </div>
+      <div class="home-card" onclick="goTo('produtos')">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <rect x="8" y="18" width="28" height="18" rx="4" fill="#C4956A"/>
+          <path d="M14 18 Q14 10 22 10 Q30 10 30 18" fill="#A0522D"/>
+          <ellipse cx="22" cy="20" rx="5" ry="3" fill="#8B3A14"/>
+          <rect x="11" y="22" width="22" height="2" rx="1" fill="#FAF5EE" opacity="0.4"/>
+        </svg>
+        <span class="home-card-label">Produtos</span>
+      </div>
+      <div class="home-card" onclick="goTo('relatorios')">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <rect x="8" y="26" width="6" height="12" rx="2" fill="#C4956A"/>
+          <rect x="17" y="20" width="6" height="18" rx="2" fill="#A0522D"/>
+          <rect x="26" y="14" width="6" height="24" rx="2" fill="#8B3A14"/>
+          <path d="M8 26 L14 20 L22 14 L30 10" stroke="#6B2D0E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="30" cy="10" r="2.5" fill="#6B2D0E"/>
+        </svg>
+        <span class="home-card-label">Relatorios</span>
+      </div>
+      <div class="home-card" onclick="goTo('cameras')">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <rect x="6" y="14" width="32" height="22" rx="5" fill="#A0522D"/>
+          <circle cx="22" cy="25" r="7" fill="#C4956A"/>
+          <circle cx="22" cy="25" r="4" fill="#FAF5EE"/>
+          <circle cx="22" cy="25" r="2" fill="#6B2D0E"/>
+          <rect x="16" y="10" width="12" height="5" rx="2.5" fill="#8B3A14"/>
+          <circle cx="33" cy="17" r="2" fill="#FAF5EE"/>
+        </svg>
+        <span class="home-card-label">Cameras</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: VENDA ===================== -->
+  <div class="screen" id="screen-venda">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('home')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Registrar Venda</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <button class="btn-primary" onclick="goTo('scanner')">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="2" height="10" rx="1" fill="white"/><rect x="5" y="4" width="1" height="10" rx="0.5" fill="white"/><rect x="7" y="4" width="2" height="10" rx="1" fill="white"/><rect x="10" y="4" width="1" height="10" rx="0.5" fill="white"/><rect x="12" y="4" width="2" height="10" rx="1" fill="white"/><rect x="15" y="4" width="1" height="10" rx="0.5" fill="white"/></svg>
+        Escanear Codigo de Barras
+      </button>
+      <div class="section-label">Itens da Venda</div>
+      <div id="venda-items-list">
+        <div class="venda-item" style="margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div>
+              <div class="venda-item-name">Pao frances</div>
+              <div style="font-size:11px;color:var(--text-light);font-weight:600">R$ 5,00 / un</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="qty-btn" onclick="changeQty(this,-1)">-</button>
+            <span class="qty-display">1</span>
+            <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            <span class="venda-item-price" data-unit="5.00">R$ 5,00</span>
+            <button class="remove-btn" onclick="removeItem(this)">x</button>
+          </div>
+        </div>
+        <div class="venda-item">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div>
+              <div class="venda-item-name">Pao de queijo</div>
+              <div style="font-size:11px;color:var(--text-light);font-weight:600">R$ 8,00 / un</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="qty-btn" onclick="changeQty(this,-1)">-</button>
+            <span class="qty-display">1</span>
+            <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            <span class="venda-item-price" data-unit="8.00">R$ 8,00</span>
+            <button class="remove-btn" onclick="removeItem(this)">x</button>
+          </div>
+        </div>
+      </div>
+      <div class="venda-total" id="venda-total-display">
+        <span class="venda-total-label">TOTAL:</span>
+        <span class="venda-total-value">R$ 13,00</span>
+      </div>
+      <div class="section-label">Forma de Pagamento</div>
+      <div class="pay-row">
+        <button class="btn-pay" onclick="selectPay(this)">Dinheiro</button>
+        <button class="btn-pay" onclick="selectPay(this)">Cartao</button>
+        <button class="btn-pay" onclick="selectPay(this)">Pix</button>
+      </div>
+      <button class="btn-primary" onclick="finalizarVenda()" style="margin-top:4px">Finalizar Venda</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: CLIENTES ===================== -->
+  <div class="screen" id="screen-clientes">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('home')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Clientes</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <button class="btn-primary" onclick="goTo('novo-cliente')">+ Novo Cliente</button>
+      <div class="search-bar">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#9A7055" stroke-width="1.8"/><path d="M11 11L14 14" stroke="#9A7055" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input type="text" placeholder="Buscar cliente..." oninput="filterClientes(this.value)">
+      </div>
+      <div id="clientes-list">
+        <div class="list-item" onclick="goTo('cliente-detalhe','joao')" style="margin-bottom:8px">
+          <div class="list-item-left">
+            <span class="list-item-name">Joao Silva</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="badge badge-green">
+              <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#2E7D32"/><path d="M3 5L4.5 6.5L7 3.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+              Regular
+            </span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="list-item" onclick="goTo('cliente-detalhe','maria')">
+          <div class="list-item-left">
+            <span class="list-item-name">Maria Souza</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="badge badge-orange">
+              <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#E65100"/><path d="M5 3V5.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/><circle cx="5" cy="7" r="0.6" fill="white"/></svg>
+              Negativado
+            </span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="list-item" onclick="goTo('cliente-detalhe','pedro')" style="margin-top:8px">
+          <div class="list-item-left">
+            <span class="list-item-name">Pedro Oliveira</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="badge badge-green">
+              <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#2E7D32"/><path d="M3 5L4.5 6.5L7 3.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+              Regular
+            </span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <button class="btn-outline" onclick="goTo('fiado')" style="background:var(--brown-dark);color:white;border-color:var(--brown-dark)">Clientes Fiados</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: CLIENTE DETALHE ===================== -->
+  <div class="screen" id="screen-cliente-detalhe">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('clientes')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title" id="cliente-detalhe-title">Joao Silva</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <div style="display:flex;align-items:center;justify-content:center;padding:16px 0 8px">
+        <div style="width:72px;height:72px;background:var(--cream-dark);border-radius:50%;border:2.5px solid var(--cream-border);display:flex;align-items:center;justify-content:center;">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="14" r="7" fill="#C4956A"/><path d="M4 34 Q4 24 18 24 Q32 24 32 34" fill="#A0522D"/></svg>
+        </div>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Nome completo</span>
+        <span class="detail-value" id="cliente-detalhe-nome">Joao Silva</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Telefone</span>
+        <span class="detail-value" id="cliente-detalhe-tel">(34) 99999-1111</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Endereco</span>
+        <span class="detail-value" id="cliente-detalhe-end">Rua das Flores, 123</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Status Serasa</span>
+        <span id="cliente-detalhe-status">
+          <span class="badge badge-green">Aprovado</span>
+        </span>
+      </div>
+      <button class="btn-primary" onclick="goTo('fiado-detalhe')">Ver Fiado</button>
+      <button class="btn-outline" onclick="goTo('clientes')">Fechar</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: FIADO ===================== -->
+  <div class="screen" id="screen-fiado">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('clientes')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Clientes Fiado</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <div class="search-bar">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#9A7055" stroke-width="1.8"/><path d="M11 11L14 14" stroke="#9A7055" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input type="text" placeholder="Buscar cliente...">
+      </div>
+      <div style="background:var(--white);border:1.5px solid var(--cream-border);border-radius:12px;padding:12px;overflow-x:auto">
+        <table class="fiado-table">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Produto</th>
+              <th>Data Compra</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr onclick="goTo('fiado-detalhe')">
+              <td><strong>Joao Silva</strong></td>
+              <td>Pao de queijo</td>
+              <td><div>10/04/2024</div><div style="font-size:11px;color:var(--text-light)">20/04/2024</div></td>
+              <td><span class="chevron">›</span></td>
+            </tr>
+            <tr onclick="goTo('fiado-detalhe')">
+              <td><strong>Joao Silva</strong></td>
+              <td>Pao frances</td>
+              <td><div>08/04/2024</div><div style="font-size:11px;color:var(--text-light)">20/04/2024</div></td>
+              <td><span class="chevron">›</span></td>
+            </tr>
+            <tr onclick="goTo('fiado-detalhe')">
+              <td><strong>Maria Souza</strong></td>
+              <td>Rosca grande</td>
+              <td><div>07/04/2024</div><div style="font-size:11px;color:var(--text-light)">21/04/2024</div></td>
+              <td><span class="chevron">›</span></td>
+            </tr>
+            <tr onclick="goTo('fiado-detalhe')">
+              <td><strong>Maria Souza</strong></td>
+              <td>Pao hungaro</td>
+              <td><div>05/04/2024</div><div style="font-size:11px;color:var(--text-light)">21/04/2024</div></td>
+              <td><span class="chevron">›</span></td>
+            </tr>
+            <tr onclick="goTo('fiado-detalhe')">
+              <td><strong>Pedro Oliveira</strong></td>
+              <td>Biscoito polvilho</td>
+              <td><div>02/04/2024</div><div style="font-size:11px;color:var(--text-light)">18/04/2024</div></td>
+              <td><span class="chevron">›</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="fiado-total-row">
+        <span class="fiado-total-label">Total em aberto:</span>
+        <span class="fiado-total-value">R$ 131,00</span>
+      </div>
+      <button class="btn-outline" onclick="goTo('clientes')">Fechar</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: FIADO DETALHE ===================== -->
+  <div class="screen" id="screen-fiado-detalhe">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('fiado')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Fiado - Joao Silva</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <div class="section-label">Compras em aberto</div>
+      <div class="fiado-detail-item">
+        <div class="fiado-detail-produto">Pao de queijo x2</div>
+        <div class="fiado-detail-sub">Compra: 10/04/2024 · Vence: 20/04/2024</div>
+        <div class="fiado-detail-price">R$ 16,00</div>
+      </div>
+      <div class="fiado-detail-item">
+        <div class="fiado-detail-produto">Pao frances x5</div>
+        <div class="fiado-detail-sub">Compra: 08/04/2024 · Vence: 20/04/2024</div>
+        <div class="fiado-detail-price">R$ 25,00</div>
+      </div>
+      <div class="fiado-detail-item">
+        <div class="fiado-detail-produto">Rosca grande x1</div>
+        <div class="fiado-detail-sub">Compra: 06/04/2024 · Vence: 18/04/2024</div>
+        <div class="fiado-detail-price">R$ 12,00</div>
+      </div>
+      <div class="fiado-total-row">
+        <span class="fiado-total-label">Total devendo:</span>
+        <span class="fiado-total-value">R$ 53,00</span>
+      </div>
+      <button class="btn-primary" onclick="showNotif('Pagamento registrado com sucesso!'); goTo('clientes')">Registrar Pagamento</button>
+      <button class="btn-outline" onclick="goTo('fiado')">Voltar</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: SCANNER ===================== -->
+  <div class="screen" id="screen-scanner">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo(scannerOrigin)">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Escanear Codigo de Barras</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="scanner-area">
+      <p class="scanner-text">Aponte o leitor para o codigo de barras<br>do produto...</p>
+      <div class="scanner-pulse">
+        <svg width="190" height="160" viewBox="0 0 190 160" fill="none">
+          <rect x="20" y="90" width="150" height="52" rx="4" fill="#FAF5EE" stroke="#C4956A" stroke-width="1.5"/>
+          <rect x="28" y="96" width="4" height="40" rx="2" fill="#6B2D0E"/>
+          <rect x="36" y="96" width="2" height="40" rx="1" fill="#8B3A14"/>
+          <rect x="42" y="96" width="5" height="40" rx="2" fill="#6B2D0E"/>
+          <rect x="51" y="96" width="2" height="40" rx="1" fill="#8B3A14"/>
+          <rect x="57" y="96" width="4" height="40" rx="2" fill="#6B2D0E"/>
+          <rect x="65" y="96" width="3" height="40" rx="1.5" fill="#8B3A14"/>
+          <rect x="72" y="96" width="2" height="40" rx="1" fill="#6B2D0E"/>
+          <rect x="78" y="96" width="5" height="40" rx="2" fill="#8B3A14"/>
+          <rect x="87" y="96" width="2" height="40" rx="1" fill="#6B2D0E"/>
+          <rect x="93" y="96" width="4" height="40" rx="2" fill="#8B3A14"/>
+          <rect x="101" y="96" width="2" height="40" rx="1" fill="#6B2D0E"/>
+          <rect x="107" y="96" width="5" height="40" rx="2" fill="#8B3A14"/>
+          <rect x="116" y="96" width="2" height="40" rx="1" fill="#6B2D0E"/>
+          <rect x="122" y="96" width="4" height="40" rx="2" fill="#8B3A14"/>
+          <rect x="130" y="96" width="3" height="40" rx="1.5" fill="#6B2D0E"/>
+          <rect x="137" y="96" width="2" height="40" rx="1" fill="#8B3A14"/>
+          <rect x="143" y="96" width="5" height="40" rx="2" fill="#6B2D0E"/>
+          <rect x="152" y="96" width="3" height="40" rx="1.5" fill="#8B3A14"/>
+          <rect x="158" y="96" width="4" height="40" rx="2" fill="#6B2D0E"/>
+          <text x="95" y="154" text-anchor="middle" font-size="11" font-family="'Nunito', monospace" font-weight="800" fill="#6B2D0E">1234567891012</text>
+          <!-- Scanner gun -->
+          <path d="M120 20 Q140 15 148 28 L155 50 L115 65 L100 45 Q105 30 120 20Z" fill="#A0522D"/>
+          <rect x="105" y="48" width="22" height="12" rx="3" fill="#8B3A14"/>
+          <path d="M115 60 L110 85" stroke="#6B2D0E" stroke-width="3" stroke-linecap="round"/>
+          <rect x="100" y="82" width="20" height="8" rx="3" fill="#6B2D0E"/>
+          <ellipse cx="136" cy="32" rx="8" ry="6" fill="#C4956A" opacity="0.5"/>
+          <!-- Laser lines -->
+          <path d="M115 65 L68 96" stroke="#A0522D" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.7"/>
+          <path d="M115 68 L95 96" stroke="#A0522D" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.7"/>
+          <path d="M115 72 L125 96" stroke="#A0522D" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.7"/>
+        </svg>
+      </div>
+      <button class="btn-primary" style="max-width:280px" onclick="simulateScan()">Simular Escaneamento</button>
+      <button class="btn-outline" style="max-width:280px" onclick="goTo(scannerOrigin)">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: NOVO CLIENTE ===================== -->
+  <div class="screen" id="screen-novo-cliente">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('clientes')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Novo Cliente</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <div class="field-group">
+        <label>Nome:</label>
+        <input class="field-input" type="text" placeholder="Nome completo" id="nc-nome">
+      </div>
+      <div class="field-group">
+        <label>Telefone:</label>
+        <input class="field-input" type="tel" placeholder="(00) 00000-0000" id="nc-tel">
+      </div>
+      <div class="field-group">
+        <label>Endereco:</label>
+        <input class="field-input" type="text" placeholder="Rua, numero, bairro" id="nc-end">
+      </div>
+      <button class="btn-outline" onclick="verificarSerasa()">Verificar Serasa</button>
+      <div id="serasa-result" style="display:none" class="serasa-status">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#2E7D32"/><path d="M5 8L7 10L11 6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Status: Aprovado
+      </div>
+      <button class="btn-primary" onclick="salvarCliente()">Salvar</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: FUNCIONARIOS ===================== -->
+  <div class="screen" id="screen-funcionarios">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('home')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Funcionarios</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <button class="btn-primary" onclick="goTo('novo-funcionario')">+ Novo Funcionario</button>
+      <div class="section-label">Equipe ativa</div>
+      <div class="list-item" onclick="goTo('funcionario-detalhe','carlos')" style="margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:44px;height:44px;background:var(--cream-dark);border-radius:50%;border:2px solid var(--cream-border);display:flex;align-items:center;justify-content:center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="4.5" fill="#C4956A"/><path d="M3 22 Q3 16 12 16 Q21 16 21 22" fill="#A0522D"/></svg>
+          </div>
+          <div class="list-item-left">
+            <span class="list-item-name">Carlos</span>
+            <span class="list-item-sub">Padeiro</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="list-item" onclick="goTo('funcionario-detalhe','ana')">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:44px;height:44px;background:var(--cream-dark);border-radius:50%;border:2px solid var(--cream-border);display:flex;align-items:center;justify-content:center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="4.5" fill="#C4956A"/><path d="M3 22 Q3 16 12 16 Q21 16 21 22" fill="#A0522D"/></svg>
+          </div>
+          <div class="list-item-left">
+            <span class="list-item-name">Ana</span>
+            <span class="list-item-sub">Atendente</span>
+          </div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: FUNCIONARIO DETALHE ===================== -->
+  <div class="screen" id="screen-funcionario-detalhe">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('funcionarios')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title" id="func-detalhe-title">Funcionario</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <div style="display:flex;align-items:center;justify-content:center;padding:12px 0">
+        <div style="width:72px;height:72px;background:var(--brown-pale);border-radius:50%;border:2.5px solid var(--brown-light);display:flex;align-items:center;justify-content:center;">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="14" r="7" fill="white" opacity="0.8"/><path d="M4 34 Q4 24 18 24 Q32 24 32 34" fill="white" opacity="0.6"/></svg>
+        </div>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Nome</span>
+        <span class="detail-value" id="func-nome">Carlos</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Cargo</span>
+        <span class="detail-value" id="func-cargo">Padeiro</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Admissao</span>
+        <span class="detail-value" id="func-admissao">01/02/2024</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Contato emergencia</span>
+        <span class="detail-value" id="func-contato">(34) 09999-0000</span>
+      </div>
+      <div class="section-label">Ponto do dia</div>
+      <div class="ponto-row">
+        <div class="ponto-card">
+          <span class="ponto-tipo">Entrada</span>
+          <span class="ponto-time">08:00</span>
+        </div>
+        <div class="ponto-card">
+          <span class="ponto-tipo">Saida</span>
+          <span class="ponto-time" id="func-saida">12:00</span>
+        </div>
+      </div>
+      <div class="detail-row" style="flex-direction:row;align-items:center;justify-content:space-between">
+        <div>
+          <div class="detail-label">Atestados</div>
+          <div class="detail-value">0 este mes</div>
+        </div>
+        <button class="link-btn" onclick="showNotif('Nenhum atestado encontrado')">Ver</button>
+      </div>
+      <button class="btn-outline" onclick="goTo('funcionarios')">Fechar</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: NOVO FUNCIONARIO ===================== -->
+  <div class="screen" id="screen-novo-funcionario">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('funcionarios')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Novo Funcionario</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <div class="field-group">
+        <label>Nome completo:</label>
+        <input class="field-input" type="text" placeholder="Nome do funcionario" id="nf-nome">
+      </div>
+      <div class="field-group">
+        <label>Cargo:</label>
+        <select class="field-input" id="nf-cargo">
+          <option value="">Selecionar cargo...</option>
+          <option>Padeiro</option>
+          <option>Atendente</option>
+          <option>Gerente</option>
+          <option>Auxiliar</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Telefone:</label>
+        <input class="field-input" type="tel" placeholder="(00) 00000-0000" id="nf-tel">
+      </div>
+      <div class="field-group">
+        <label>Data de admissao:</label>
+        <input class="field-input" type="date" id="nf-admissao">
+      </div>
+      <div class="field-group">
+        <label>Contato emergencia:</label>
+        <input class="field-input" type="tel" placeholder="(00) 00000-0000" id="nf-emergencia">
+      </div>
+      <button class="btn-primary" onclick="salvarFuncionario()">+ Salvar Funcionario</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: PRODUTOS ===================== -->
+  <div class="screen" id="screen-produtos">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('home')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Produtos</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <button class="btn-primary" onclick="goTo('novo-produto')">+ Novo Produto</button>
+      <div class="search-bar">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#9A7055" stroke-width="1.8"/><path d="M11 11L14 14" stroke="#9A7055" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input type="text" placeholder="Buscar produto...">
+      </div>
+      <div id="produtos-list">
+        <div class="list-item" style="margin-bottom:8px">
+          <div class="list-item-left">
+            <span class="list-item-name">Pao frances</span>
+            <span class="list-item-sub">Padaria</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-weight:800;color:var(--brown-dark);font-size:15px">R$ 5,00</span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="list-item" style="margin-bottom:8px">
+          <div class="list-item-left">
+            <span class="list-item-name">Pao de queijo</span>
+            <span class="list-item-sub">Salgados</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-weight:800;color:var(--brown-dark);font-size:15px">R$ 8,00</span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+        <div class="list-item">
+          <div class="list-item-left">
+            <span class="list-item-name">Pao sovado</span>
+            <span class="list-item-sub">Padaria</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-weight:800;color:var(--brown-dark);font-size:15px">R$ 6,50</span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: NOVO PRODUTO ===================== -->
+  <div class="screen" id="screen-novo-produto">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('produtos')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Novo Produto</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <div class="field-group">
+        <label>Nome do Produto:</label>
+        <input class="field-input" type="text" placeholder="Ex: Pao frances" id="np-nome">
+      </div>
+      <div class="field-group">
+        <label>Preco (R$):</label>
+        <input class="field-input" type="number" placeholder="0,00" step="0.01" min="0" id="np-preco">
+      </div>
+      <div class="field-group">
+        <label>Categoria:</label>
+        <select class="field-input" id="np-cat">
+          <option value="">Selecionar categoria...</option>
+          <option>Padaria</option>
+          <option>Salgados</option>
+          <option>Doces</option>
+          <option>Bebidas</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Codigo de Barras:</label>
+        <div style="display:flex;gap:10px">
+          <input class="field-input" type="text" placeholder="0000000000000" id="np-cod" style="flex:1">
+          <button class="btn-primary btn-sm" onclick="openScanner('novo-produto')" style="width:auto;padding:10px 14px">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="2" height="10" rx="1" fill="white"/><rect x="5" y="4" width="1" height="10" rx="0.5" fill="white"/><rect x="7" y="4" width="2" height="10" rx="1" fill="white"/><rect x="10" y="4" width="1" height="10" rx="0.5" fill="white"/><rect x="12" y="4" width="2" height="10" rx="1" fill="white"/><rect x="15" y="4" width="1" height="10" rx="0.5" fill="white"/></svg>
+          </button>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="salvarProduto()">+ Salvar</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: RELATORIOS ===================== -->
+  <div class="screen" id="screen-relatorios">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('home')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Relatorios</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <div class="field-group">
+        <label>Periodo:</label>
+        <select class="field-input" id="rel-periodo" onchange="updateRelatorio()">
+          <option value="">Selecionar</option>
+          <option value="hoje">Hoje</option>
+          <option value="semana">Esta semana</option>
+          <option value="mes">Este mes</option>
+          <option value="ano">Este ano</option>
+        </select>
+      </div>
+      <div class="relatorio-card">
+        <span class="relatorio-label">Total vendido</span>
+        <span class="relatorio-value" id="rel-total">R$ 5.000</span>
+        <span style="font-size:12px;opacity:0.6;margin-top:4px" id="rel-periodo-label">Selecione um periodo</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--white);border:1.5px solid var(--cream-border);border-radius:12px;padding:14px">
+          <div style="font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px">Vendas</div>
+          <div style="font-size:22px;font-weight:800;color:var(--brown-dark);font-family:'Playfair Display',serif" id="rel-num-vendas">47</div>
+        </div>
+        <div style="background:var(--white);border:1.5px solid var(--cream-border);border-radius:12px;padding:14px">
+          <div style="font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px">Ticket medio</div>
+          <div style="font-size:22px;font-weight:800;color:var(--brown-dark);font-family:'Playfair Display',serif" id="rel-ticket">R$ 106</div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="goTo('grafico')">Ver Grafico</button>
+      <button class="btn-outline" onclick="goTo('filtro-produto')">Filtrar por Produto</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: GRAFICO ===================== -->
+  <div class="screen" id="screen-grafico">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('relatorios')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Ver Grafico</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <div class="tabs-row">
+        <button class="tab-btn active" onclick="switchTab(this,'grafico','dia')">Dia</button>
+        <button class="tab-btn" onclick="switchTab(this,'grafico','semana')">Semana</button>
+        <button class="tab-btn" onclick="switchTab(this,'grafico','mes')">Mes</button>
+      </div>
+      <div class="chart-container">
+        <div class="chart-date" id="chart-date">Hoje: 24/04/2024</div>
+        <div style="display:flex;gap:0">
+          <div class="chart-y">
+            <span class="chart-y-label">R$ 500</span>
+            <span class="chart-y-label">R$ 400</span>
+            <span class="chart-y-label">R$ 300</span>
+            <span class="chart-y-label">R$ 200</span>
+            <span class="chart-y-label">R$ 100</span>
+            <span class="chart-y-label">R$ 0</span>
+          </div>
+          <div class="bars-area" id="grafico-bars">
+          </div>
+        </div>
+        <div class="chart-total-row">
+          <span class="chart-total-label" id="chart-total-label">Total vendido hoje:</span>
+          <span class="chart-total-value" id="chart-total-value">R$ 780</span>
+        </div>
+      </div>
+      <button class="btn-outline" onclick="goTo('relatorios')">Fechar</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: FILTRO PRODUTO ===================== -->
+  <div class="screen" id="screen-filtro-produto">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('relatorios')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Filtrar por Produto</span>
+      <div style="width:38px"></div>
+    </div>
+    <div class="screen-content">
+      <div class="field-group">
+        <label>Produto:</label>
+        <select class="field-input" onchange="updateFiltroChart(this.value)">
+          <option value="queijo">Pao de queijo</option>
+          <option value="frances">Pao frances</option>
+          <option value="sovado">Pao sovado</option>
+          <option value="rosca">Rosca grande</option>
+        </select>
+      </div>
+      <div class="tabs-row">
+        <button class="tab-btn" onclick="switchTab(this,'filtro','dia')">Dia</button>
+        <button class="tab-btn active" onclick="switchTab(this,'filtro','semana')">Semana</button>
+        <button class="tab-btn" onclick="switchTab(this,'filtro','mes')">Mes</button>
+      </div>
+      <div class="chart-container">
+        <div class="bars-area" id="filtro-bars" style="height:120px"></div>
+        <div class="chart-total-row">
+          <span class="chart-total-label">Total vendido:</span>
+          <span class="chart-total-value" id="filtro-total">R$ 1.200</span>
+        </div>
+      </div>
+      <button class="btn-outline" onclick="goTo('relatorios')">Fechar</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: CAMERAS ===================== -->
+  <div class="screen" id="screen-cameras">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('home')">
+        <svg class="back-arrow" viewBox="0 0 22 22" fill="none"><path d="M14 6L9 11L14 16" stroke="#6B2D0E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="topbar-title">Cameras</span>
+      <div style="width:38px"></div>
+    </div>
+    <div style="padding:16px 20px 0">
+      <div style="background:var(--cream-dark);border:1.5px solid var(--cream-border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:10px">
+        <div style="width:10px;height:10px;background:#ff3b3b;border-radius:50%;animation:blink 1s infinite;flex-shrink:0"></div>
+        <span style="font-size:13px;font-weight:700;color:var(--text-mid)">2 cameras ao vivo</span>
+      </div>
+    </div>
+    <div class="camera-grid">
+      <div class="camera-card">
+        <div class="camera-feed">
+          <div class="camera-live-dot"></div>
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="5" y="10" width="22" height="18" rx="3" fill="#333"/><polygon points="27,15 35,19 27,23" fill="#555"/><circle cx="16" cy="19" r="4" fill="#555"/><circle cx="16" cy="19" r="2" fill="#333"/></svg>
+        </div>
+        <span class="camera-card-label">Loja</span>
+        <span class="badge badge-green" style="font-size:10px">
+          <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" fill="#2E7D32"/></svg>
+          Online
+        </span>
+      </div>
+      <div class="camera-card">
+        <div class="camera-feed">
+          <div class="camera-live-dot"></div>
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="5" y="10" width="22" height="18" rx="3" fill="#333"/><polygon points="27,15 35,19 27,23" fill="#555"/><circle cx="16" cy="19" r="4" fill="#555"/><circle cx="16" cy="19" r="2" fill="#333"/></svg>
+        </div>
+        <span class="camera-card-label">Cozinha</span>
+        <span class="badge badge-green" style="font-size:10px">
+          <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" fill="#2E7D32"/></svg>
+          Online
+        </span>
+      </div>
+    </div>
+    <div style="padding:0 20px 24px;display:flex;flex-direction:column;gap:10px">
+      <div style="background:var(--white);border:1.5px solid var(--cream-border);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px">Gravacoes</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text-dark)">Ultimas 24h</div>
+        </div>
+        <button class="link-btn">Ver todas</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL VENDA SUCESSO -->
+  <div class="modal-overlay" id="modal-venda">
+    <div class="modal-card">
+      <div class="modal-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#2E7D32"/><path d="M10 16L14 20L22 12" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="modal-title">Venda Finalizada!</div>
+      <div style="text-align:center;font-size:14px;color:var(--text-mid);font-weight:600">Pagamento registrado com sucesso.</div>
+      <div style="background:var(--cream-dark);border-radius:10px;padding:14px;display:flex;justify-content:space-between">
+        <span style="font-size:13px;font-weight:700;color:var(--text-mid)">Total pago:</span>
+        <span style="font-size:15px;font-weight:800;color:var(--brown-dark)" id="modal-total">R$ 13,00</span>
+      </div>
+      <button class="btn-primary" onclick="closeModal('modal-venda'); goTo('home')">Voltar ao Inicio</button>
+      <button class="btn-outline" onclick="closeModal('modal-venda'); resetVenda()">Nova Venda</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let currentScreen = 'home';
+  let scannerOrigin = 'venda';
+  let selectedPayment = '';
+  let currentChartTab = { grafico: 'dia', filtro: 'semana' };
+
+  const chartData = {
+    grafico: {
+      dia: { labels:['6','7','8','9','10','11','12'], values:[80,120,250,200,180,160,90], highlight:2, date:'Hoje: 24/04/2024', total:'R$ 780', totalLabel:'Total vendido hoje:' },
+      semana: { labels:['Seg','Ter','Qua','Qui','Sex','Sab','Dom'], values:[320,450,280,500,410,380,200], highlight:3, date:'Semana: 22-28/04/2024', total:'R$ 2.540', totalLabel:'Total na semana:' },
+      mes: { labels:['S1','S2','S3','S4'], values:[980,1200,850,1150], highlight:1, date:'Mes: Abril 2024', total:'R$ 4.180', totalLabel:'Total no mes:' }
+    },
+    filtro: {
+      queijo: { dia:[40,60,80,50,90,70,55], semana:[200,320,180,400,280,220,150], mes:[850,1200,980,1100] },
+      frances: { dia:[90,120,200,160,140,110,80], semana:[500,620,480,700,560,440,310], mes:[1800,2200,1950,2100] },
+      sovado: { dia:[30,50,70,40,60,50,35], semana:[150,240,130,300,200,180,120], mes:[650,900,720,850] },
+      rosca: { dia:[20,40,60,35,50,45,28], semana:[120,200,110,260,180,150,90], mes:[520,750,580,700] }
+    }
+  };
+
+  const filtroTotals = {
+    queijo: { dia:'R$ 445', semana:'R$ 1.200', mes:'R$ 4.930' },
+    frances: { dia:'R$ 900', semana:'R$ 2.610', mes:'R$ 8.050' },
+    sovado: { dia:'R$ 335', semana:'R$ 850', mes:'R$ 2.720' },
+    rosca: { dia:'R$ 278', semana:'R$ 810', mes:'R$ 2.550' }
+  };
+
+  const clientesData = {
+    joao: { nome:'Joao Silva', tel:'(34) 99999-1111', end:'Rua das Flores, 123', status:'aprovado' },
+    maria: { nome:'Maria Souza', tel:'(34) 99888-2222', end:'Av. Brasil, 456', status:'negativado' },
+    pedro: { nome:'Pedro Oliveira', tel:'(34) 97777-3333', end:'Rua do Comercio, 78', status:'aprovado' }
+  };
+
+  const funcionariosData = {
+    carlos: { nome:'Carlos', cargo:'Padeiro', admissao:'01/02/2024', contato:'(34) 09999-0000', saida:'12:00' },
+    ana: { nome:'Ana', cargo:'Atendente', admissao:'15/03/2024', contato:'(34) 08888-0001', saida:'18:00' }
+  };
+
+  function goTo(screen, param) {
+    if (param) {
+      if (screen === 'cliente-detalhe') loadClienteDetalhe(param);
+      if (screen === 'funcionario-detalhe') loadFuncDetalhe(param);
+    }
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('screen-' + screen);
+    if (el) { el.classList.add('active'); currentScreen = screen; }
+    if (screen === 'grafico') renderChart('grafico', currentChartTab.grafico);
+    if (screen === 'filtro-produto') renderFiltroChart('queijo', currentChartTab.filtro);
+  }
+
+  function openScanner(origin) {
+    scannerOrigin = origin;
+    goTo('scanner');
+  }
+
+  function loadClienteDetalhe(id) {
+    const c = clientesData[id];
+    if (!c) return;
+    document.getElementById('cliente-detalhe-title').textContent = c.nome;
+    document.getElementById('cliente-detalhe-nome').textContent = c.nome;
+    document.getElementById('cliente-detalhe-tel').textContent = c.tel;
+    document.getElementById('cliente-detalhe-end').textContent = c.end;
+    const statusEl = document.getElementById('cliente-detalhe-status');
+    if (c.status === 'aprovado') {
+      statusEl.innerHTML = '<span class="badge badge-green"><svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#2E7D32"/><path d="M3 5L4.5 6.5L7 3.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>Aprovado</span>';
+    } else {
+      statusEl.innerHTML = '<span class="badge badge-red"><svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#C62828"/><path d="M4 4L6 6M6 4L4 6" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>Negativado</span>';
+    }
+  }
+
+  function loadFuncDetalhe(id) {
+    const f = funcionariosData[id];
+    if (!f) return;
+    document.getElementById('func-detalhe-title').textContent = f.nome;
+    document.getElementById('func-nome').textContent = f.nome;
+    document.getElementById('func-cargo').textContent = f.cargo;
+    document.getElementById('func-admissao').textContent = f.admissao;
+    document.getElementById('func-contato').textContent = f.contato;
+    document.getElementById('func-saida').textContent = f.saida;
+  }
+
+  function selectPay(btn) {
+    document.querySelectorAll('.btn-pay').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedPayment = btn.textContent;
+  }
+
+  function changeQty(btn, delta) {
+    const row = btn.closest('.venda-item');
+    const qtyEl = row.querySelector('.qty-display');
+    const priceEl = row.querySelector('.venda-item-price');
+    const unit = parseFloat(priceEl.dataset.unit);
+    let qty = parseInt(qtyEl.textContent) + delta;
+    if (qty < 1) qty = 1;
+    qtyEl.textContent = qty;
+    priceEl.textContent = 'R$ ' + (unit * qty).toFixed(2).replace('.',',');
+    updateVendaTotal();
+  }
+
+  function removeItem(btn) {
+    btn.closest('.venda-item').remove();
+    updateVendaTotal();
+  }
+
+  function updateVendaTotal() {
+    let total = 0;
+    document.querySelectorAll('#venda-items-list .venda-item-price').forEach(el => {
+      const val = el.textContent.replace('R$ ','').replace(',','.');
+      total += parseFloat(val) || 0;
+    });
+    const disp = document.getElementById('venda-total-display').querySelector('.venda-total-value');
+    disp.textContent = 'R$ ' + total.toFixed(2).replace('.',',');
+    document.getElementById('modal-total').textContent = 'R$ ' + total.toFixed(2).replace('.',',');
+  }
+
+  function finalizarVenda() {
+    if (!selectedPayment) { showNotif('Selecione uma forma de pagamento!', true); return; }
+    document.getElementById('modal-venda').classList.add('open');
+  }
+
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  function resetVenda() {
+    document.getElementById('venda-items-list').innerHTML = '';
+    selectedPayment = '';
+    document.querySelectorAll('.btn-pay').forEach(b => b.classList.remove('selected'));
+    updateVendaTotal();
+    goTo('venda');
+  }
+
+  function verificarSerasa() {
+    const nome = document.getElementById('nc-nome').value;
+    const result = document.getElementById('serasa-result');
+    result.style.display = 'flex';
+    if (nome.toLowerCase().includes('negativ') || Math.random() < 0.25) {
+      result.className = 'serasa-status reprovado';
+      result.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#C62828"/><path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg> Status: Reprovado - Negativado';
+    } else {
+      result.className = 'serasa-status';
+      result.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#2E7D32"/><path d="M5 8L7 10L11 6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Status: Aprovado';
+    }
+  }
+
+  function salvarCliente() {
+    const nome = document.getElementById('nc-nome').value;
+    if (!nome) { showNotif('Preencha o nome do cliente!', true); return; }
+    showNotif('Cliente "' + nome + '" salvo com sucesso!');
+    document.getElementById('nc-nome').value = '';
+    document.getElementById('nc-tel').value = '';
+    document.getElementById('nc-end').value = '';
+    document.getElementById('serasa-result').style.display = 'none';
+    setTimeout(() => goTo('clientes'), 1500);
+  }
+
+  function salvarFuncionario() {
+    const nome = document.getElementById('nf-nome').value;
+    if (!nome) { showNotif('Preencha o nome do funcionario!', true); return; }
+    showNotif('Funcionario "' + nome + '" salvo!');
+    document.getElementById('nf-nome').value = '';
+    setTimeout(() => goTo('funcionarios'), 1500);
+  }
+
+  function salvarProduto() {
+    const nome = document.getElementById('np-nome').value;
+    const preco = document.getElementById('np-preco').value;
+    if (!nome || !preco) { showNotif('Preencha todos os campos!', true); return; }
+    showNotif('Produto "' + nome + '" salvo!');
+    document.getElementById('np-nome').value = '';
+    document.getElementById('np-preco').value = '';
+    document.getElementById('np-cod').value = '';
+    setTimeout(() => goTo('produtos'), 1500);
+  }
+
+  function simulateScan() {
+    showNotif('Produto encontrado: Pao sovado');
+    if (scannerOrigin === 'novo-produto') {
+      setTimeout(() => {
+        goTo('novo-produto');
+        document.getElementById('np-cod').value = '1234567891012';
+        document.getElementById('np-nome').value = 'Pao sovado';
+      }, 1200);
+    } else {
+      setTimeout(() => {
+        goTo('venda');
+        const list = document.getElementById('venda-items-list');
+        const item = document.createElement('div');
+        item.className = 'venda-item';
+        item.style.marginTop = '8px';
+        item.innerHTML = '<div style="display:flex;align-items:center;gap:10px"><div><div class="venda-item-name">Pao sovado</div><div style="font-size:11px;color:var(--text-light);font-weight:600">R$ 6,50 / un</div></div></div><div style="display:flex;align-items:center;gap:8px"><button class="qty-btn" onclick="changeQty(this,-1)">-</button><span class="qty-display">1</span><button class="qty-btn" onclick="changeQty(this,1)">+</button><span class="venda-item-price" data-unit="6.50">R$ 6,50</span><button class="remove-btn" onclick="removeItem(this)">x</button></div>';
+        list.appendChild(item);
+        updateVendaTotal();
+      }, 1200);
+    }
+  }
+
+  function updateRelatorio() {
+    const periodo = document.getElementById('rel-periodo').value;
+    const totais = { hoje:'R$ 780', semana:'R$ 2.540', mes:'R$ 5.000', ano:'R$ 48.200' };
+    const vendas = { hoje:'12', semana:'47', mes:'198', ano:'1.204' };
+    const tickets = { hoje:'R$ 65', semana:'R$ 54', mes:'R$ 106', ano:'R$ 98' };
+    const labels = { hoje:'Hoje, 24/04/2024', semana:'22 - 28 de Abril', mes:'Abril 2024', ano:'Ano 2024' };
+    if (totais[periodo]) {
+      document.getElementById('rel-total').textContent = totais[periodo];
+      document.getElementById('rel-num-vendas').textContent = vendas[periodo];
+      document.getElementById('rel-ticket').textContent = tickets[periodo];
+      document.getElementById('rel-periodo-label').textContent = labels[periodo];
+    }
+  }
+
+  function switchTab(btn, section, tab) {
+    const parent = btn.closest('.tabs-row');
+    parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentChartTab[section] = tab;
+    if (section === 'grafico') renderChart('grafico', tab);
+    if (section === 'filtro') {
+      const prod = document.querySelector('#screen-filtro-produto select').value;
+      renderFiltroChart(prod, tab);
+    }
+  }
+
+  function renderChart(section, tab) {
+    const data = chartData.grafico[tab];
+    const container = document.getElementById('grafico-bars');
+    document.getElementById('chart-date').textContent = data.date;
+    document.getElementById('chart-total-label').textContent = data.totalLabel;
+    document.getElementById('chart-total-value').textContent = data.total;
+    const max = Math.max(...data.values);
+    container.innerHTML = data.values.map((v, i) => {
+      const h = Math.round((v / max) * 100);
+      const hl = i === data.highlight ? ' highlight' : '';
+      const formattedV = 'R$ ' + v;
+      return `<div class="bar-wrap"><div class="bar${hl}" style="height:${h}%"><div class="bar-tooltip">${formattedV}</div></div><span class="bar-label">${data.labels[i]}</span></div>`;
+    }).join('');
+  }
+
+  function updateFiltroChart(prod) {
+    renderFiltroChart(prod, currentChartTab.filtro);
+  }
+
+  function renderFiltroChart(prod, tab) {
+    const values = chartData.filtro[prod][tab];
+    const labels = { dia:['D','S','T','Q','Q','S','S'], semana:['D','S','T','Q','Q','S','S'], mes:['S1','S2','S3','S4'] };
+    const tabLabels = labels[tab] || labels.semana;
+    const container = document.getElementById('filtro-bars');
+    const max = Math.max(...values);
+    container.innerHTML = values.map((v, i) => {
+      const h = Math.round((v / max) * 90);
+      const hl = v === max ? ' highlight' : '';
+      const day = tabLabels[i] || i;
+      const formattedDay = tab === 'semana' ? ['Dom','Seg','Ter','Qua','Qui','Sab','Dom'][i] : day;
+      const formattedV = 'R$ ' + v;
+      return `<div class="bar-wrap"><div class="bar${hl}" style="height:${h}%"><div class="bar-tooltip">${(tab==='semana'?formattedDay:day)} - ${formattedV}</div></div><span class="bar-label">${day}</span></div>`;
+    }).join('');
+    document.getElementById('filtro-total').textContent = filtroTotals[prod][tab];
+  }
+
+  function filterClientes(val) {
+    const items = document.querySelectorAll('#clientes-list .list-item');
+    items.forEach(item => {
+      const name = item.querySelector('.list-item-name').textContent.toLowerCase();
+      item.style.display = name.includes(val.toLowerCase()) ? '' : 'none';
+    });
+  }
+
+  function showNotif(msg, isError) {
+    const existing = document.querySelector('.notif');
+    if (existing) existing.remove();
+    const notif = document.createElement('div');
+    notif.className = 'notif';
+    notif.textContent = msg;
+    if (isError) notif.style.background = '#C62828';
+    document.body.appendChild(notif);
+    setTimeout(() => notif.remove(), 2500);
+  }
+
+  // Init charts on load
+  window.addEventListener('load', () => {
+    renderChart('grafico', 'dia');
+    renderFiltroChart('queijo', 'semana');
+  });
+</script>
+</body>
+</html>
