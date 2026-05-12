@@ -41,5 +41,19 @@ public class ClienteController {
         return removido ? "Cliente removido com sucesso ✅" : "Cliente não encontrado! ⚠️";
     }
 
+    // adicionando edição de cliente
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Cliente> editarCliente(
+            @PathVariable Long id,
+            @RequestBody Cliente cliente
+    ){
+
+        return ResponseEntity.ok(
+                service.editarCliente(id, cliente)
+        );
+    }
+
+
 
 }

@@ -1,6 +1,7 @@
 package com.pao_fresquim.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pao_fresquim.api.Enums.CategoriaProduto;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,7 +16,11 @@ public class Produto {
 
     private String nome;
     private Double preco;
-    private String codigo_barras;
+
+    @Enumerated(EnumType.STRING)
+    private CategoriaProduto categoria;
+
+    private Long codigo_barras;
 
 
     // relacionamentos:
@@ -24,11 +29,14 @@ public class Produto {
     @JsonIgnore
     private List<ItemVenda> itensDaVenda;
 
+    // construtor
+
     public Produto(){}
 
-    public Produto(String nome, Double preco, String codigo_barras) {
+    public Produto(String nome, Double preco, CategoriaProduto categoria, Long codigo_barras) {
         this.nome = nome;
         this.preco = preco;
+        this.categoria = categoria;
         this.codigo_barras = codigo_barras;
     }
 
@@ -47,7 +55,7 @@ public class Produto {
         return preco;
     }
 
-    public String getCodigo_barras() {
+    public Long getCodigo_barras() {
         return codigo_barras;
     }
 
@@ -62,7 +70,7 @@ public class Produto {
         this.preco = preco;
     }
 
-    public void setCodigo_barras(String codigo_barras) {
+    public void setCodigo_barras(Long codigo_barras) {
         this.codigo_barras = codigo_barras;
     }
 }

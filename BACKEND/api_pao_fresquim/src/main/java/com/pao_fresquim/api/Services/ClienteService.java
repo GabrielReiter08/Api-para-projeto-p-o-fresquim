@@ -43,4 +43,16 @@ public class ClienteService {
         return false;
     }
 
+
+    // metodo editar cliente
+    public Cliente editarCliente(Long id, Cliente cliente){
+        Cliente clienteExiste = repository.findById(id).orElseThrow(()-> new RuntimeException("Cliente não encontrado"));
+
+        clienteExiste.setNome(cliente.getNome());
+        clienteExiste.setTelefone(cliente.getTelefone());
+        clienteExiste.setEndereco(cliente.getEndereco());
+
+        return repository.save(clienteExiste);
+    }
+
 }

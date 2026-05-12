@@ -15,7 +15,7 @@ public class Cliente {
 
     private String nome;
     private String telefone;
-    private String email;
+
     private String endereco;
 
     private Boolean status_serasa;
@@ -31,10 +31,9 @@ public class Cliente {
 
     public Cliente(){}
 
-    public Cliente(String nome, String telefone, String email, String endereco, boolean status_serasa, Float saldo_devedor) {
+    public Cliente(String nome, String telefone, String endereco, boolean status_serasa, Float saldo_devedor) {
         this.nome = nome;
         this.telefone = telefone;
-        this.email = email;
         this.endereco = endereco;
         this.status_serasa = status_serasa;
         this.saldo_devedor = saldo_devedor;
@@ -58,9 +57,7 @@ public class Cliente {
         return telefone;
     }
 
-    public String getEmail() {
-        return email;
-    }
+
 
     public String getEndereco() {
         return endereco;
@@ -94,9 +91,7 @@ public class Cliente {
         this.telefone = telefone;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+
 
     public void setEndereco(String endereco) {
         this.endereco = endereco;

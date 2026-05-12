@@ -1,4 +1,4 @@
-package com.pao_fresquim.api.model;
+package com.pao_fresquim.api.Enums;
 
 public enum FormaPagamento {
     DINHEIRO("Dinheiro"),
