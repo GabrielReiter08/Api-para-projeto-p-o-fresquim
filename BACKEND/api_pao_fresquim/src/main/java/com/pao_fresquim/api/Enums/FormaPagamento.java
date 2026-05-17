@@ -3,6 +3,7 @@ package com.pao_fresquim.api.Enums;
 public enum FormaPagamento {
     DINHEIRO("Dinheiro"),
     CARTAO("Cartão"),
+    FIADO("Fiado"),
     PIX("Pix");
 
     private String descricao;

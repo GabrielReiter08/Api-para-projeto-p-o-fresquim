@@ -19,7 +19,7 @@ public class Cliente {
     private String endereco;
 
     private Boolean status_serasa;
-    private Float saldo_devedor;
+    private Double saldo_devedor;
 
     // teste
 
@@ -31,7 +31,7 @@ public class Cliente {
 
     public Cliente(){}
 
-    public Cliente(String nome, String telefone, String endereco, boolean status_serasa, Float saldo_devedor) {
+    public Cliente(String nome, String telefone, String endereco, boolean status_serasa, Double saldo_devedor) {
         this.nome = nome;
         this.telefone = telefone;
         this.endereco = endereco;
@@ -67,7 +67,7 @@ public class Cliente {
         return status_serasa;
     }
 
-    public Float getSaldo_devedor() {
+    public Double getSaldo_devedor() {
         return saldo_devedor;
     }
 
@@ -101,7 +101,7 @@ public class Cliente {
         this.status_serasa = status_serasa;
     }
 
-    public void setSaldo_devedor(Float saldo_devedor) {
+    public void setSaldo_devedor(Double saldo_devedor) {
         this.saldo_devedor = saldo_devedor;
     }
 }

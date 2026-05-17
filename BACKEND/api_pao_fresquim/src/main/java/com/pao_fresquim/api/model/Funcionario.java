@@ -27,7 +27,7 @@ public class Funcionario {
     private CargoFuncionario cargo;
     private String contato_emergencia;
     private LocalDate data_admissao;
-    private String licensas;
+    private String licencas; // talvez sera necessário a retirada da parte de licenças
 
     //testar este (converte para byte o arquivo para salvar no bd)
     // vai precisar de um bd com bom armazenamento.
@@ -57,14 +57,14 @@ public class Funcionario {
 
     public Funcionario(){}
 
-    public Funcionario(String nome, String telefone, CargoFuncionario cargo, String endereco, String contato_emergencia, LocalDate data_admissao, String licensas, byte[] atestadoMedico) {
+    public Funcionario(String nome, String telefone, CargoFuncionario cargo, String endereco, String contato_emergencia, LocalDate data_admissao, String licencas, byte[] atestadoMedico) {
         this.nome = nome;
         this.telefone = telefone;
         this.endereco = endereco;
         this.cargo = cargo;
         this.contato_emergencia = contato_emergencia;
         this.data_admissao = data_admissao;
-        this.licensas = licensas;
+        this.licencas = licencas;
         this.atestadoMedico = atestadoMedico;
     }
 
@@ -96,8 +96,8 @@ public class Funcionario {
         return data_admissao;
     }
 
-    public String getLicensas() {
-        return licensas;
+    public String getLicencas() {
+        return licencas;
     }
 
     // a sofrer alterações
@@ -136,8 +136,8 @@ public class Funcionario {
         this.data_admissao = data_admissao;
     }
 
-    public void setLicensas(String licensas) {
-        this.licensas = licensas;
+    public void setLicencas(String licencas) {
+        this.licencas = licencas;
     }
 
     public void setNomeArquivo(String nomeArquivo) {

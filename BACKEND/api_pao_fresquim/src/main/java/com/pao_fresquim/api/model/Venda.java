@@ -1,6 +1,7 @@
 package com.pao_fresquim.api.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.pao_fresquim.api.Enums.FormaPagamento;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -43,7 +44,8 @@ public class Venda {
 
     public Venda(){}
 
-    public Venda(LocalDateTime data_venda, Double valor_total, FormaPagamento formaPagamento, Boolean nf_emitida, Cliente cliente, List<ItemVenda> itens) {
+    public Venda(LocalDateTime data_venda, Double valor_total, FormaPagamento formaPagamento, Boolean nf_emitida, Cliente cliente,
+                 List<ItemVenda> itens) {
         this.data_venda = data_venda;
         this.valor_total = valor_total;
         this.formaPagamento = formaPagamento;
@@ -54,6 +56,14 @@ public class Venda {
 
     // getters
 
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
 
     public Long getId() {
         return id;
@@ -96,5 +106,9 @@ public class Venda {
 
     public void setNf_emitida(Boolean nf_emitida) {
         this.nf_emitida = nf_emitida;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 }
