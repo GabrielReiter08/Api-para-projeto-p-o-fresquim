@@ -15,6 +15,8 @@ import java.util.List;
 @Table(name = "Funcionarios")
 public class Funcionario {
 
+    
+
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
