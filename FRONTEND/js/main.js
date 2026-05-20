@@ -1,3 +1,8 @@
+  import { produtoService } from "./services/produtoService.js";
+  import { clienteService } from "./services/clienteService.js";
+  import { funcionarioService } from "./services/funcionarioService.js";
+  import { vendaService } from "./services/vendaService.js";
+  
   let currentScreen = 'home';
   let scannerOrigin = 'venda';
   let selectedPayment = '';
@@ -140,36 +145,96 @@
     }
   }
 
-  function salvarCliente() {
-    const nome = document.getElementById('nc-nome').value;
-    if (!nome) { showNotif('Preencha o nome do cliente!', true); return; }
-    showNotif('Cliente "' + nome + '" salvo com sucesso!');
-    document.getElementById('nc-nome').value = '';
-    document.getElementById('nc-tel').value = '';
-    document.getElementById('nc-end').value = '';
-    document.getElementById('serasa-result').style.display = 'none';
-    setTimeout(() => goTo('clientes'), 1500);
+  async function salvarCliente() {
+  const nome = document.getElementById("nc-nome").value;
+  const telefone = document.getElementById("nc-tel").value;
+  const endereco = document.getElementById("nc-end").value;
+
+  if (!nome) {
+    showNotif("Preencha o nome do cliente!", true);
+    return;
   }
 
-  function salvarFuncionario() {
-    const nome = document.getElementById('nf-nome').value;
-    if (!nome) { showNotif('Preencha o nome do funcionario!', true); return; }
-    showNotif('Funcionario "' + nome + '" salvo!');
-    document.getElementById('nf-nome').value = '';
-    setTimeout(() => goTo('funcionarios'), 1500);
+  const cliente = {
+    nome,
+    telefone,
+    endereco
+  };
+
+  try {
+    await clienteService.cadastrar(cliente);
+
+    showNotif(`Cliente "${nome}" salvo com sucesso!`);
+
+    document.getElementById("nc-nome").value = "";
+    document.getElementById("nc-tel").value = "";
+    document.getElementById("nc-end").value = "";
+    document.getElementById("serasa-result").style.display = "none";
+
+    setTimeout(() => goTo("clientes"), 1500);
+  } catch (error) {
+    console.error(error);
+    showNotif("Erro ao salvar cliente!", true);
+  }
+}
+
+  async function salvarFuncionario() {
+  const nome = document.getElementById("nf-nome").value;
+
+  if (!nome) {
+    showNotif("Preencha o nome do funcionário!", true);
+    return;
   }
 
-  function salvarProduto() {
-    const nome = document.getElementById('np-nome').value;
-    const preco = document.getElementById('np-preco').value;
-    if (!nome || !preco) { showNotif('Preencha todos os campos!', true); return; }
-    showNotif('Produto "' + nome + '" salvo!');
-    document.getElementById('np-nome').value = '';
-    document.getElementById('np-preco').value = '';
-    document.getElementById('np-cod').value = '';
-    setTimeout(() => goTo('produtos'), 1500);
+  const funcionario = {
+    nome
+  };
+
+  try {
+    await funcionarioService.cadastrar(funcionario);
+
+    showNotif(`Funcionário "${nome}" salvo!`);
+
+    document.getElementById("nf-nome").value = "";
+
+    setTimeout(() => goTo("funcionarios"), 1500);
+  } catch (error) {
+    console.error(error);
+    showNotif("Erro ao salvar funcionário!", true);
+  }
+}
+  async function salvarProduto() {
+  const nome = document.getElementById("np-nome").value;
+  const preco = document.getElementById("np-preco").value;
+  const codigo = document.getElementById("np-cod").value;
+
+  if (!nome || !preco) {
+    showNotif("Preencha todos os campos!", true);
+    return;
   }
 
+  const produto = {
+    nome,
+    preco: Number(preco),
+    categoria: "Padaria",
+    codigo_barras: codigo
+  };
+
+  try {
+    await produtoService.cadastrar(produto);
+
+    showNotif(`Produto "${nome}" salvo!`);
+
+    document.getElementById("np-nome").value = "";
+    document.getElementById("np-preco").value = "";
+    document.getElementById("np-cod").value = "";
+
+    setTimeout(() => goTo("produtos"), 1500);
+  } catch (error) {
+    console.error(error);
+    showNotif("Erro ao salvar produto!", true);
+  }
+}
   function simulateScan() {
     showNotif('Produto encontrado: Pao sovado');
     if (scannerOrigin === 'novo-produto') {
@@ -278,3 +343,21 @@
     renderChart('grafico', 'dia');
     renderFiltroChart('queijo', 'semana');
   });
+
+window.goTo = goTo;
+window.openScanner = openScanner;
+window.selectPay = selectPay;
+window.changeQty = changeQty;
+window.removeItem = removeItem;
+window.finalizarVenda = finalizarVenda;
+window.closeModal = closeModal;
+window.resetVenda = resetVenda;
+window.verificarSerasa = verificarSerasa;
+window.salvarCliente = salvarCliente;
+window.salvarFuncionario = salvarFuncionario;
+window.salvarProduto = salvarProduto;
+window.simulateScan = simulateScan;
+window.updateRelatorio = updateRelatorio;
+window.switchTab = switchTab;
+window.updateFiltroChart = updateFiltroChart;
+window.filterClientes = filterClientes;
