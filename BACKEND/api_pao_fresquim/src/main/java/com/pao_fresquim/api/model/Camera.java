@@ -1,12 +1,15 @@
 package com.pao_fresquim.api.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "Cameras")
 public class Camera {
 
@@ -17,6 +20,7 @@ public class Camera {
     private String localizacao;
 
     @ManyToMany(mappedBy = "cameras")
+    @JsonIgnore
     private List<Funcionario> funcionarios = new ArrayList<>();
 
    /* @ManyToMany

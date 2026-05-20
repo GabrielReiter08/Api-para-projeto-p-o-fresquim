@@ -1,9 +1,13 @@
 package com.pao_fresquim.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "ItensVendas")
 public class ItemVenda {
 
@@ -18,7 +22,8 @@ public class ItemVenda {
     // relacionamentos:
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "venda_id")
-    @JsonIgnore
+    //@JsonIgnore
+    @JsonBackReference
     private Venda venda;
 
     @ManyToOne

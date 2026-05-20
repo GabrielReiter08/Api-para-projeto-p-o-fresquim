@@ -1,12 +1,14 @@
 package com.pao_fresquim.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pao_fresquim.api.Enums.CategoriaProduto;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "Produtos")
 public class Produto {
 
@@ -59,7 +61,12 @@ public class Produto {
         return codigo_barras;
     }
 
+    public CategoriaProduto getCategoria() {
+        return categoria;
+    }
+
     // setters
+
 
 
     public void setNome(String nome) {
@@ -72,5 +79,9 @@ public class Produto {
 
     public void setCodigo_barras(Long codigo_barras) {
         this.codigo_barras = codigo_barras;
+    }
+
+    public void setCategoria(CategoriaProduto categoria) {
+        this.categoria = categoria;
     }
 }

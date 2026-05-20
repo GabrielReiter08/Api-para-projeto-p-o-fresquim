@@ -4,11 +4,13 @@ import com.pao_fresquim.api.DTOs.RelatorioDTO;
 import com.pao_fresquim.api.Repositories.VendaRepository;
 import com.pao_fresquim.api.model.Venda;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class RelatorioService {
 
     @Autowired
@@ -33,7 +35,7 @@ public class RelatorioService {
         LocalDateTime inicio = data.atStartOfDay();
         LocalDateTime fim = data.atTime(23,59,59);
 
-        List<Venda> vendas = repository.findByData_vendaBetween(inicio, fim);
+        List<Venda> vendas = repository.findByDataVendaBetween(inicio, fim);
 
         return gerarRelatorio(vendas);
 
@@ -52,7 +54,7 @@ public class RelatorioService {
                 LocalDate.of(ano, mes, 1).lengthOfMonth()
         ).atTime(23,59,59);
 
-        List<Venda> vendas = repository.findByData_vendaBetween(inicio, fim);
+        List<Venda> vendas = repository.findByDataVendaBetween(inicio, fim);
 
         return gerarRelatorio(vendas);
     }
@@ -66,7 +68,7 @@ public class RelatorioService {
         LocalDateTime fim = LocalDate.of(ano,12,31)
                 .atTime(23,59,59);
 
-        List<Venda> vendas = repository.findByData_vendaBetween(inicio, fim);
+        List<Venda> vendas = repository.findByDataVendaBetween(inicio, fim);
 
         return gerarRelatorio(vendas);
     }

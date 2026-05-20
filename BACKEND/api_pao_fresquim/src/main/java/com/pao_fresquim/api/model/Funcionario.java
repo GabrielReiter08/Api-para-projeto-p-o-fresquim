@@ -1,6 +1,7 @@
 package com.pao_fresquim.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pao_fresquim.api.Enums.CargoFuncionario;
 import jakarta.persistence.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "Funcionarios")
 public class Funcionario {
 
@@ -24,6 +26,8 @@ public class Funcionario {
     private String nome;
     private String telefone;
     private String endereco;
+
+    @Enumerated(EnumType.STRING)
     private CargoFuncionario cargo;
     private String contato_emergencia;
     private LocalDate data_admissao;
@@ -113,8 +117,16 @@ public class Funcionario {
         return tipoArquivo;
     }
 
+    public CargoFuncionario getCargo() {
+        return cargo;
+    }
+
     // setters
 
+
+    public void setCargo(CargoFuncionario cargo) {
+        this.cargo = cargo;
+    }
 
     public void setNome(String nome) {
         this.nome = nome;

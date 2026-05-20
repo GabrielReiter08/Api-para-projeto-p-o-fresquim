@@ -73,6 +73,7 @@ public class ProdutoService {
 
         produtoExiste.setNome(produto.getNome());
         produtoExiste.setPreco(produto.getPreco());
+        produtoExiste.setCategoria(produto.getCategoria());
         produtoExiste.setCodigo_barras(produto.getCodigo_barras());
 
         return repository.save(produtoExiste);

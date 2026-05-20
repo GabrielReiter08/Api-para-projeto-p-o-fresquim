@@ -75,8 +75,9 @@ public class FuncionarioService {
         funcionarioExiste.setNome(funcionario.getNome());
         funcionarioExiste.setTelefone(funcionario.getTelefone());
         funcionarioExiste.setEndereco(funcionario.getEndereco());
+        funcionarioExiste.setCargo(funcionario.getCargo());
         funcionarioExiste.setContato_emergencia(funcionario.getContato_emergencia());
-        funcionarioExiste.setLicensas(funcionario.getLicensas());
+        funcionarioExiste.setLicencas(funcionario.getLicencas());
 
         // Por lógica não coloquei como editar data de admissão
 

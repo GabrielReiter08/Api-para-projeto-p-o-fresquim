@@ -1,12 +1,14 @@
 package com.pao_fresquim.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "Clientes")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Cliente {
 
     @Id
@@ -31,7 +33,7 @@ public class Cliente {
 
     public Cliente(){}
 
-    public Cliente(String nome, String telefone, String endereco, boolean status_serasa, Double saldo_devedor) {
+    public Cliente(String nome, String telefone, String endereco, Boolean status_serasa, Double saldo_devedor) {
         this.nome = nome;
         this.telefone = telefone;
         this.endereco = endereco;
@@ -67,6 +69,10 @@ public class Cliente {
         return status_serasa;
     }
 
+    public Boolean getStatus_serasa() {
+        return status_serasa;
+    }
+
     public Double getSaldo_devedor() {
         return saldo_devedor;
     }
@@ -97,7 +103,7 @@ public class Cliente {
         this.endereco = endereco;
     }
 
-    public void setStatus_serasa(boolean status_serasa) {
+    public void setStatus_serasa(Boolean status_serasa) {
         this.status_serasa = status_serasa;
     }
 

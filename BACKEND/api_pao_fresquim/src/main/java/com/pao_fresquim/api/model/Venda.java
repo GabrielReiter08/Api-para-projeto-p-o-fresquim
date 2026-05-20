@@ -1,6 +1,8 @@
 package com.pao_fresquim.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pao_fresquim.api.Enums.FormaPagamento;
 import jakarta.persistence.*;
 
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "Vendas")
 public class Venda {
 
@@ -16,7 +19,8 @@ public class Venda {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime data_venda;
+    @JsonProperty("data_venda") // para deixar como está no bd
+    private LocalDateTime dataVenda;
     private Double valor_total;
 
     //utilizar enum
@@ -27,17 +31,17 @@ public class Venda {
 
 
     // relacionamentos:
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
 
 
 
-    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ItemVenda> itens = new ArrayList<>();
 
@@ -46,7 +50,7 @@ public class Venda {
 
     public Venda(LocalDateTime data_venda, Double valor_total, FormaPagamento formaPagamento, Boolean nf_emitida, Cliente cliente,
                  List<ItemVenda> itens) {
-        this.data_venda = data_venda;
+        this.dataVenda = data_venda;
         this.valor_total = valor_total;
         this.formaPagamento = formaPagamento;
         this.nf_emitida = nf_emitida;
@@ -69,8 +73,8 @@ public class Venda {
         return id;
     }
 
-    public LocalDateTime getData_venda() {
-        return data_venda;
+    public LocalDateTime getDataVenda() {
+        return dataVenda;
     }
 
     public Double getValor_total() {
@@ -89,11 +93,14 @@ public class Venda {
         return itens;
     }
 
+
+
+
     // setters
 
 
-    public void setData_venda(LocalDateTime data_venda) {
-        this.data_venda = data_venda;
+    public void setDataVenda(LocalDateTime dataVenda) {
+        this.dataVenda = dataVenda;
     }
 
     public void setValor_total(Double valor_total) {
@@ -108,7 +115,17 @@ public class Venda {
         this.nf_emitida = nf_emitida;
     }
 
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
     }
+
+    public void setItens(List<ItemVenda> itens) {
+        this.itens = itens;
+    }
+
+
 }

@@ -53,5 +53,20 @@ public class VendaController {
         return removido ? "Funcionário removido com sucesso ✅" : "Funcionário não encontrado! ⚠️";
     } */
 
+    @PutMapping("/{id}")
+    public Venda atualizarVenda(@PathVariable Long id,
+                                @RequestBody Venda venda){
+
+        return service.atualizarVenda(id, venda);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletarVenda(@PathVariable Long id){
+
+        service.deletarVenda(id);
+
+        return ResponseEntity.ok("Venda deletada com sucesso");
+    }
 
 }
