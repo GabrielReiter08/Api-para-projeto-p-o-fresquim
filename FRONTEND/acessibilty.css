@@ -1,0 +1,258 @@
+/* =========================
+   ACESSIBILIDADE
+========================= */
+
+.accessibility-actions {
+  position: absolute;
+  top: 10px;
+  right: 22px;
+  display: flex;
+  gap: 8px;
+  z-index: 9999;
+}
+
+.accessibility-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid var(--cream-border);
+  background: var(--white);
+  color: var(--brown-dark);
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accessibility-btn:hover {
+  background: var(--cream-dark);
+  transform: translateY(-1px);
+}
+
+/* Modo escuro */
+body.dark-mode {
+  --brown-dark: #D6A36A;
+  --brown-mid: #C4956A;
+  --brown-light: #E0B985;
+  --brown-pale: #8B5A35;
+
+  --cream: #1F1712;
+  --cream-dark: #2A1D16;
+  --cream-border: #4A3324;
+
+  --text-dark: #FAF5EE;
+  --text-mid: #E2D4C0;
+  --text-light: #C4956A;
+
+  --white: #2A1D16;
+
+  --green-bg: #1E3A24;
+  --orange-bg: #3A2816;
+
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+  background: #120D0A;
+}
+
+body.dark-mode .app-shell {
+  background: var(--cream);
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.55);
+}
+
+body.dark-mode .camera-feed {
+  background: #0B0B0B;
+}
+
+body.dark-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+/* Fonte maior */
+body.large-font .home-card-label,
+body.large-font .list-item-name,
+body.large-font .detail-value,
+body.large-font .venda-item-name,
+body.large-font .field-input,
+body.large-font .btn-primary,
+body.large-font .btn-outline,
+body.large-font .btn-pay,
+body.large-font .topbar-title {
+  font-size: 1.12em;
+}
+
+body.large-font .home-brand {
+  font-size: 29px;
+}
+
+body.large-font .relatorio-value {
+  font-size: 32px;
+}
+
+/* Redução de animações */
+body.reduce-motion *,
+body.reduce-motion *::before,
+body.reduce-motion *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* =========================
+   MEDIA QUERIES
+========================= */
+
+/* Celulares menores */
+@media (max-width: 430px) {
+  .app-shell {
+    width: 100%;
+    min-height: 100vh;
+    border-radius: 0;
+  }
+
+  .screen {
+    min-height: 100vh;
+  }
+
+  .theme-toggle,
+  .font-toggle {
+    right: 14px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .theme-toggle {
+    top: 14px;
+  }
+
+  .font-toggle {
+    top: 62px;
+  }
+
+  .home-grid {
+    padding: 22px 16px;
+    gap: 12px;
+  }
+
+  .screen-content {
+    padding: 16px;
+  }
+
+  @media (max-width: 430px) {
+  .accessibility-actions {
+    top: 14px;
+    right: 14px;
+  }
+
+  .accessibility-btn {
+    width: 38px;
+    height: 38px;
+  }
+}
+}
+
+/* Telas muito pequenas */
+@media (max-width: 360px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-card {
+    padding: 20px 10px;
+  }
+
+  .pay-row {
+    flex-direction: column;
+  }
+
+  .theme-toggle,
+  .font-toggle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .font-toggle {
+    top: 56px;
+  }
+}
+
+/* Telas maiores */
+@media (min-width: 768px) {
+  .app-shell {
+    width: 520px;
+    min-height: 860px;
+  }
+
+  .screen {
+    min-height: 860px;
+  }
+
+  .theme-toggle,
+  .font-toggle {
+    right: 26px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .theme-toggle {
+    top: 22px;
+  }
+
+  .font-toggle {
+    top: 76px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-shell {
+    width: 720px;
+    min-height: 900px;
+  }
+
+  .screen {
+    min-height: 900px;
+  }
+
+  .home-grid {
+    gap: 18px;
+    padding: 32px 30px;
+  }
+
+  .screen-content {
+    padding: 24px 30px 30px;
+  }
+}
+
+/* Preferência do sistema: modo escuro */
+@media (prefers-color-scheme: dark) {
+  body.auto-dark {
+    --brown-dark: #D6A36A;
+    --brown-mid: #C4956A;
+    --brown-light: #E0B985;
+    --brown-pale: #8B5A35;
+
+    --cream: #1F1712;
+    --cream-dark: #2A1D16;
+    --cream-border: #4A3324;
+
+    --text-dark: #FAF5EE;
+    --text-mid: #E2D4C0;
+    --text-light: #C4956A;
+
+    --white: #2A1D16;
+
+    background: #120D0A;
+  }
+}
+
+/* Preferência do sistema: reduzir movimento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

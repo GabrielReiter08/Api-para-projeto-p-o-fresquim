@@ -5,16 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pao FresQUIM</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="acessibilty.css">
 </head>
 <body>
 <div class="app-shell" id="app">
 
-    <button
-    id="theme-toggle"
-    class="theme-toggle"
-  >
-    🌙
-   </button>
+  <div class="accessibility-actions">
+  <button id="theme-toggle" class="accessibility-btn">🌙</button>
+  <button id="font-toggle" class="accessibility-btn">A+</button>
+  </div>
+  
+
+   
   <!-- ===================== SCREEN: HOME ===================== -->
     
   
@@ -842,6 +844,7 @@
   </div>
 
   <script type="module" src="./js/main.js"></script>
+  <script type="module" src="./js/acessibilty.js"></script>
 
 </div>
 
