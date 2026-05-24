@@ -223,7 +223,10 @@
   try {
     await produtoService.cadastrar(produto);
 
-    showNotif(`Produto "${nome}" salvo!`);
+    showSuccessPopup(
+  "Produto cadastrado!",
+  `O produto "${nome}" foi cadastrado com sucesso.`
+   );
 
     document.getElementById("np-nome").value = "";
     document.getElementById("np-preco").value = "";
@@ -344,24 +347,17 @@
     renderFiltroChart('queijo', 'semana');
   });
 
-const themeToggle = document.getElementById("theme-toggle");
-
-const savedTheme = localStorage.getItem("theme");
-
-if (savedTheme === "dark") {
-  document.body.classList.add("dark-mode");
-  themeToggle.textContent = "☀️";
+  function showSuccessPopup(title, message) {
+  document.getElementById("success-popup-title").textContent = title;
+  document.getElementById("success-popup-message").textContent = message;
+  document.getElementById("success-popup").classList.add("open");
 }
 
-themeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
+function closeSuccessPopup() {
+  document.getElementById("success-popup").classList.remove("open");
+}
 
-  const isDark = document.body.classList.contains("dark-mode");
 
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-
-  themeToggle.textContent = isDark ? "☀️" : "🌙";
-});
 
 window.goTo = goTo;
 window.openScanner = openScanner;
