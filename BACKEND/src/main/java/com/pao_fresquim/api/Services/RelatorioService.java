@@ -17,15 +17,23 @@ public class RelatorioService {
     private VendaRepository repository;
 
     private RelatorioDTO gerarRelatorio(List<Venda> vendas){
+
         Double total = 0.0;
 
         for(Venda venda : vendas){
             total += venda.getValor_total();
         }
 
+        Double ticketMedio = 0.0;
+
+        if(!vendas.isEmpty()){
+            ticketMedio = total / vendas.size();
+        }
+
         return new RelatorioDTO(
                 vendas.size(),
-                total
+                total,
+                ticketMedio
         );
     }
 
