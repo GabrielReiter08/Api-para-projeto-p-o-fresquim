@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080";
+const API_URL = "https://api-para-projeto-p-o-fresquim.onrender.com";
 
 async function request(endpoint, options = {}) {
   const response = await fetch(`${API_URL}${endpoint}`, {
@@ -43,3 +43,4 @@ export const api = {
       method: "DELETE"
     })
 };
+
