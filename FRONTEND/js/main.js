@@ -199,9 +199,10 @@
 
     setTimeout(() => goTo("funcionarios"), 1500);
   } catch (error) {
-    console.error(error);
-    showNotif("Erro ao salvar funcionário!", true);
-  }
+  console.error("Erro completo:", error);
+  alert(error.message);
+  showNotif("Erro ao salvar cliente!", true);
+}
 }
   async function salvarProduto() {
   const nome = document.getElementById("np-nome").value;
