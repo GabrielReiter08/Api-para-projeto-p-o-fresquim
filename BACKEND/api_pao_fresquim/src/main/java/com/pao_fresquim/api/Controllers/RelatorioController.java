@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 
-@CrossOrigin(origins = "*")
+
 
 @RestController
 @RequestMapping("/relatorios")
