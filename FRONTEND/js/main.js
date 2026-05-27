@@ -358,6 +358,25 @@ function closeSuccessPopup() {
   document.getElementById("success-popup").classList.remove("open");
 }
 
+function toggleChatbot() {
+  const chatbot = document.getElementById("chatbot-container");
+  const fab = document.querySelector(".chat-fab");
+
+  fab.classList.remove("rotating");
+
+  void fab.offsetWidth;
+
+  fab.classList.add("rotating");
+
+  setTimeout(() => {
+    fab.classList.remove("rotating");
+  }, 600);
+
+  chatbot.classList.toggle("open");
+}
+
+window.toggleChatbot = toggleChatbot;
+
 
 
 window.goTo = goTo;

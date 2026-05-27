@@ -15,7 +15,9 @@
   <button id="font-toggle" class="accessibility-btn">A+</button>
   </div>
   
+  
 
+  
    
   <!-- ===================== SCREEN: HOME ===================== -->
     
@@ -842,6 +844,34 @@
       <button class="btn-outline" onclick="closeModal('modal-venda'); resetVenda()">Nova Venda</button>
     </div>
   </div>
+
+  <!-- BOTÃO FLUTUANTE CHAT -->
+<div class="chat-fab-wrapper">
+
+  <button
+    class="chat-fab"
+    onclick="toggleChatbot()"
+    aria-label="Abrir ajuda"
+  >
+    <span class="chat-fab-icon">🍞</span>
+  </button>
+
+  <span class="chat-fab-label">
+    Ajuda
+  </span>
+
+</div>>
+
+<!-- CHATBOT -->
+<div
+  id="chatbot-container"
+  class="chatbot-container"
+>
+  <iframe
+  src="./chatbot_fresquim_v3.html"
+  class="chatbot-frame"
+></iframe>
+</div>
 
   <script type="module" src="./js/main.js"></script>
   <script type="module" src="./js/acessibilty.js"></script>
