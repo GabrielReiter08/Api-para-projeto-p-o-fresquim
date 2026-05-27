@@ -55,4 +55,29 @@ public class ClienteService {
         return repository.save(clienteExiste);
     }
 
+
+    // metodo que registra o pagamento de um saldo devedor
+
+    public void registraPagamentoSaldoDevedor(
+            Cliente cliente,
+            Double valor
+    ){
+
+        if(cliente.getSaldo_devedor() - valor < 0){
+            throw new RuntimeException(
+                    "O valor torna o saldo devedor menor que 0!"
+            );
+        }
+
+        cliente.setSaldo_devedor(
+                cliente.getSaldo_devedor() - valor
+        );
+
+        if(cliente.getSaldo_devedor() <= 0){
+            cliente.setStatus_serasa(false);
+        }
+
+        repository.save(cliente);
+    }
+
 }

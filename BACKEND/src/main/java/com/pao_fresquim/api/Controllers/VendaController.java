@@ -44,14 +44,6 @@ public class VendaController {
     }
 
 
-    // Será necessário um metodo para remover vendas??
-
-    /*@DeleteMapping("cliente/{id}")
-    public String excluirVendaDeUmCliente(@PathVariable Long id){
-        boolean removido = service.;
-
-        return removido ? "Funcionário removido com sucesso ✅" : "Funcionário não encontrado! ⚠️";
-    } */
 
     @PutMapping("/{id}")
     public Venda atualizarVenda(@PathVariable Long id,
@@ -68,5 +60,9 @@ public class VendaController {
 
         return ResponseEntity.ok("Venda deletada com sucesso");
     }
+
+
+
+
 
 }

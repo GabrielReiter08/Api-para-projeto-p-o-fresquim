@@ -41,6 +41,16 @@ public class ClienteController {
         return removido ? "Cliente removido com sucesso ✅" : "Cliente não encontrado! ⚠️";
     }
 
+    @GetMapping("/pagamento/{id}/{valor}")
+    public ResponseEntity<Cliente> registrarPagamento(@PathVariable Long id, @PathVariable Double valor){
+        return service.buscarPorId(id)
+                .map(cliente -> {
+                    service.registraPagamentoSaldoDevedor(cliente, valor);
+
+                    return ResponseEntity.ok(cliente);
+                }) .orElse(ResponseEntity.notFound().build());
+    }
+
     // adicionando edição de cliente
 
     @PutMapping("/{id}")
