@@ -1,9 +1,6 @@
 package com.pao_fresquim.api.Services;
 
-import com.pao_fresquim.api.DTOs.ClienteDTO;
-import com.pao_fresquim.api.DTOs.FuncionarioDTO;
-import com.pao_fresquim.api.DTOs.ItemNotaFiscalDTO;
-import com.pao_fresquim.api.DTOs.NotaFiscalDTO;
+import com.pao_fresquim.api.DTOs.*;
 import com.pao_fresquim.api.Enums.FormaPagamento;
 import com.pao_fresquim.api.Repositories.ClienteRepository;
 import com.pao_fresquim.api.Repositories.FuncionarioRepository;
@@ -275,6 +272,45 @@ public class VendaService {
         }
 
         repository.delete(venda);
+    }
+
+
+    // retornar vendas fiado service
+
+    public List<VendaFiadoDTO> listarTodosFiados(){
+
+        return repository.findAll()
+                .stream()
+
+                .filter(venda ->
+                        venda.getFormaPagamento()
+                                == FormaPagamento.FIADO
+                )
+
+                .map(venda -> {
+
+                    List<String> nomesProdutos =
+                            venda.getItens()
+                                    .stream()
+                                    .map(item ->
+                                            item.getProduto().getNome()
+                                    )
+                                    .toList();
+
+                    return new VendaFiadoDTO(
+
+                            venda.getCliente().getNome(),
+
+                            venda.getValor_total(),
+
+                            venda.getDataVenda(),
+
+                            nomesProdutos
+                    );
+
+                })
+
+                .toList();
     }
 
 

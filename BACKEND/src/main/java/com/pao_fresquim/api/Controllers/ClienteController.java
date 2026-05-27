@@ -1,5 +1,6 @@
 package com.pao_fresquim.api.Controllers;
 
+import com.pao_fresquim.api.DTOs.VendaFiadoDTO;
 import com.pao_fresquim.api.Services.ClienteService;
 import com.pao_fresquim.api.model.Cliente;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,28 @@ public class ClienteController {
 
         return removido ? "Cliente removido com sucesso ✅" : "Cliente não encontrado! ⚠️";
     }
+
+    // Ver fiado do cliente
+
+    @GetMapping("/{id}/fiado")
+    public ResponseEntity<List<VendaFiadoDTO>> verVendasFiado(
+            @PathVariable Long id
+    ){
+
+        return service.buscarPorId(id)
+                .map(cliente ->
+                        ResponseEntity.ok(
+                                service.verFiado(cliente)
+                        )
+                )
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
+
+
+
+    // registrar pagamento
 
     @GetMapping("/pagamento/{id}/{valor}")
     public ResponseEntity<Cliente> registrarPagamento(@PathVariable Long id, @PathVariable Double valor){

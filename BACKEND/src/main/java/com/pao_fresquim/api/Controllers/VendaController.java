@@ -1,5 +1,6 @@
 package com.pao_fresquim.api.Controllers;
 
+import com.pao_fresquim.api.DTOs.VendaFiadoDTO;
 import com.pao_fresquim.api.Services.FuncionarioService;
 import com.pao_fresquim.api.Services.VendaService;
 import com.pao_fresquim.api.model.Funcionario;
@@ -62,7 +63,15 @@ public class VendaController {
     }
 
 
+    // ver todas as vendas como fiado
 
+    @GetMapping("/fiado")
+    public ResponseEntity<List<VendaFiadoDTO>> listarFiados(){
+
+        return ResponseEntity.ok(
+                service.listarTodosFiados()
+        );
+    }
 
 
 }

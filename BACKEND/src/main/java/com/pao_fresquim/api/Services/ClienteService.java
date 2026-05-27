@@ -1,5 +1,7 @@
 package com.pao_fresquim.api.Services;
 
+import com.pao_fresquim.api.DTOs.VendaFiadoDTO;
+import com.pao_fresquim.api.Enums.FormaPagamento;
 import com.pao_fresquim.api.Repositories.ClienteRepository;
 import com.pao_fresquim.api.model.Cliente;
 import org.springframework.stereotype.Service;
@@ -78,6 +80,40 @@ public class ClienteService {
         }
 
         repository.save(cliente);
+    }
+
+    // metodo para ver vendas no fiado
+
+    public List<VendaFiadoDTO> verFiado(Cliente cliente){
+
+        return cliente.getVendas()
+                .stream()
+
+                .filter(venda ->
+                        venda.getFormaPagamento()
+                                == FormaPagamento.FIADO
+                )
+
+                .map(venda -> {
+
+                    List<String> nomesProdutos =
+                            venda.getItens()
+                                    .stream()
+                                    .map(item ->
+                                            item.getProduto().getNome()
+                                    )
+                                    .toList();
+
+                    return new VendaFiadoDTO(
+                            cliente.getNome(),
+                            venda.getValor_total(),
+                            venda.getDataVenda(),
+                            nomesProdutos
+                    );
+
+                })
+
+                .toList();
     }
 
 }
